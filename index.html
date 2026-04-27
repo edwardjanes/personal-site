@@ -13,6 +13,7 @@
                   url('https://picsum.photos/id/1015/2000/1200') center/cover; 
     }
     .nav-scrolled { background-color: rgba(0, 0, 0, 0.95); }
+    .logo-img { height: 42px; width: auto; }
   </style>
 </head>
 <body class="bg-black text-white">
@@ -20,7 +21,11 @@
   <!-- Navbar -->
   <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-      <div class="text-2xl font-bold tracking-tight">EDWARD JANES</div>
+      <!-- Signature Logo -->
+      <a href="#" class="flex items-center">
+        <img src="signature.png" alt="Edward Janes" class="logo-img">
+      </a>
+
       <div class="hidden md:flex space-x-8 text-sm font-medium">
         <a href="#about" class="hover:text-emerald-400 transition">About</a>
         <a href="#services" class="hover:text-emerald-400 transition">Services</a>
@@ -51,7 +56,7 @@
     </div>
   </section>
 
-  <!-- About -->
+  <!-- About Section (with your profile.png) -->
   <section id="about" class="py-24 bg-zinc-950">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -75,7 +80,7 @@
           </div>
         </div>
         <div class="relative">
-          <img src="profile.png" alt="Edward Janes" class="rounded-3xl shadow-2xl w-full object-cover">
+          <img src="profile.PNG" alt="Edward Janes" class="rounded-3xl shadow-2xl w-full object-cover">
           
           <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-emerald-500 rounded-2xl p-6 max-w-[220px]">
             <p class="italic text-sm">"The fastest way I've seen a founder go from idea to funded."</p>
@@ -86,7 +91,7 @@
     </div>
   </section>
 
-  <!-- Services -->
+  <!-- Services, Contact, Footer (same as before) -->
   <section id="services" class="py-24">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-5xl font-bold text-center mb-16">How I Help Founders</h2>
@@ -110,7 +115,6 @@
     </div>
   </section>
 
-  <!-- Contact -->
   <section id="contact" class="py-24 bg-zinc-950">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h2 class="text-5xl font-bold mb-6">Ready to Raise?</h2>
@@ -125,7 +129,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="bg-black border-t border-white/10 py-12">
     <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
       <div>© 2026 Edward Janes. All rights reserved.</div>
