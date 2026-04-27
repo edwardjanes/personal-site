@@ -8,10 +8,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
+    
+    /* Updated Hero with your Dubai Skyline */
     .hero-bg { 
-      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), 
-                  url('https://picsum.photos/id/1015/2000/1200') center/cover; 
+      background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), 
+                  url('hero.jpg') center/cover no-repeat fixed;
+      background-position: center 30%;
     }
+    
     .nav-scrolled { background-color: rgba(0, 0, 0, 0.95); }
     
     /* Larger Signature Logo */
@@ -27,7 +31,6 @@
   <!-- Navbar -->
   <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-      <!-- Signature Logo -->
       <a href="#" class="flex items-center">
         <img src="signature.png" alt="Edward Janes" class="logo-img">
       </a>
@@ -46,8 +49,7 @@
     </div>
   </nav>
 
-  <!-- Rest of the site (Hero, About with profile.png, Services, Contact, Footer) remains the same -->
-  <!-- Hero -->
+  <!-- Hero - Now using your Dubai skyline -->
   <section class="hero-bg h-screen flex items-center">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-6">
@@ -97,7 +99,7 @@
     </div>
   </section>
 
-  <!-- Services, Contact, Footer (unchanged) -->
+  <!-- Services -->
   <section id="services" class="py-24">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-5xl font-bold text-center mb-16">How I Help Founders</h2>
@@ -121,6 +123,7 @@
     </div>
   </section>
 
+  <!-- Contact -->
   <section id="contact" class="py-24 bg-zinc-950">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h2 class="text-5xl font-bold mb-6">Ready to Raise?</h2>
@@ -135,6 +138,7 @@
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="bg-black border-t border-white/10 py-12">
     <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
       <div>© 2026 Edward Janes. All rights reserved.</div>
