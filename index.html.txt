@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edward Janes | Investment Consultant | Dubai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .hero-bg { background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover; }
+    .nav-scrolled { background-color: rgba(0, 0, 0, 0.95); }
+  </style>
+</head>
+<body class="bg-black text-white">
+
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="text-2xl font-bold tracking-tight">EDWARD JANES</div>
+      <div class="hidden md:flex space-x-8 text-sm font-medium">
+        <a href="#about" class="hover:text-emerald-400 transition">About</a>
+        <a href="#services" class="hover:text-emerald-400 transition">Services</a>
+        <a href="#success" class="hover:text-emerald-400 transition">Success Stories</a>
+        <a href="#insights" class="hover:text-emerald-400 transition">Insights</a>
+        <a href="#contact" class="hover:text-emerald-400 transition">Contact</a>
+      </div>
+      <a href="#contact" class="bg-white text-black px-6 py-3 rounded-full font-semibold hover:bg-emerald-400 hover:text-white transition">
+        Book a Call
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-bg h-screen flex items-center">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-6">
+        Great product.<br>No investors?<br><span class="text-emerald-400">We fix that.</span>
+      </h1>
+      <p class="text-2xl text-gray-300 mb-10">Helping overlooked founders raise Pre-Seed & Seed capital — faster, cleaner, and with more options.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#contact" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-5 rounded-2xl text-lg font-semibold transition">Get Funded →</a>
+        <a href="#about" class="border border-white/50 hover:bg-white/10 px-10 py-5 rounded-2xl text-lg font-semibold transition">Learn More</a>
+      </div>
+      <p class="mt-12 text-sm text-gray-400">Based in Dubai • Working globally</p>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="py-24 bg-zinc-950">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-5xl font-bold mb-8">Hi, I'm Edward Janes</h2>
+          <p class="text-xl text-gray-300 leading-relaxed mb-6">
+            Investment consultant and entrepreneur based in Dubai. I help early-stage founders secure the right capital from the right investors — without the usual headaches.
+          </p>
+          <p class="text-lg text-gray-400">
+            From London to Dubai, I've spent years connecting high-potential startups with angels, VCs, and strategic partners. My focus is simple: faster closes, better terms, and real momentum.
+          </p>
+          <div class="mt-10 flex items-center gap-8">
+            <div>
+              <div class="text-4xl font-bold text-emerald-400">50+</div>
+              <div class="text-sm text-gray-400">Founders Funded</div>
+            </div>
+            <div>
+              <div class="text-4xl font-bold text-emerald-400">$45M+</div>
+              <div class="text-sm text-gray-400">Capital Raised</div>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <img src="https://picsum.photos/id/64/800/900" alt="Edward Janes" class="rounded-3xl shadow-2xl">
+          <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-emerald-500 rounded-2xl p-6 max-w-[220px]">
+            <p class="italic text-sm">"The fastest way I've seen a founder go from idea to funded."</p>
+            <p class="text-xs mt-4 text-emerald-400">- Recent Client</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="py-24">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-5xl font-bold text-center mb-16">How I Help Founders</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-zinc-900 p-10 rounded-3xl hover:bg-zinc-800 transition">
+          <i class="fa-solid fa-magnifying-glass-dollar text-4xl text-emerald-400 mb-6"></i>
+          <h3 class="text-2xl font-semibold mb-4">Investor Matching</h3>
+          <p class="text-gray-400">Access to my curated network of active angels and VCs who invest in pre-seed and seed stages.</p>
+        </div>
+        <div class="bg-zinc-900 p-10 rounded-3xl hover:bg-zinc-800 transition">
+          <i class="fa-solid fa-file-contract text-4xl text-emerald-400 mb-6"></i>
+          <h3 class="text-2xl font-semibold mb-4">Pitch Deck & Strategy</h3>
+          <p class="text-gray-400">End-to-end preparation: deck refinement, valuation, term sheet negotiation, and rehearsal.</p>
+        </div>
+        <div class="bg-zinc-900 p-10 rounded-3xl hover:bg-zinc-800 transition">
+          <i class="fa-solid fa-handshake text-4xl text-emerald-400 mb-6"></i>
+          <h3 class="text-2xl font-semibold mb-4">Fundraising Campaign</h3>
+          <p class="text-gray-400">Full execution — warm intros, data room setup, closing process, and post-deal support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Success / Testimonials -->
+  <section id="success" class="py-24 bg-zinc-950">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-5xl font-bold mb-16">Recent Success Stories</h2>
+      <!-- Add your real case studies here -->
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-zinc-900 p-8 rounded-3xl text-left">
+          <p class="italic">"Edward helped us close our £850k seed round in under 9 weeks. Game changer."</p>
+          <p class="mt-6 font-semibold">— Founder, Fintech Startup (UK)</p>
+        </div>
+        <!-- Duplicate or replace with real ones -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-24">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-5xl font-bold mb-6">Ready to Raise?</h2>
+      <p class="text-2xl text-gray-400 mb-12">Let's discuss your startup and see if we're a good fit.</p>
+      
+      <a href="https://calendly.com/your-link" target="_blank" 
+         class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white text-xl px-12 py-6 rounded-3xl font-semibold transition mb-8">
+        Book a 30-Min Strategy Call
+      </a>
+      
+      <p class="text-gray-400">or email me at <a href="mailto:hello@edwardjanes.com" class="underline hover:text-white">hello@edwardjanes.com</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black border-t border-white/10 py-12">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div>© 2026 Edward Janes. All rights reserved.</div>
+      <div class="flex gap-8 text-sm">
+        <a href="https://x.com/EdwardJanes" target="_blank" class="hover:text-emerald-400">X</a>
+        <a href="https://linkedin.com/in/edward-janes" target="_blank" class="hover:text-emerald-400">LinkedIn</a>
+        <a href="https://instagram.com/iamedjanes" target="_blank" class="hover:text-emerald-400">Instagram</a>
+      </div>
+      <div class="text-sm text-gray-500">Dubai, UAE</div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('nav-scrolled');
+      } else {
+        nav.classList.remove('nav-scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
