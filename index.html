@@ -13,7 +13,13 @@
                   url('https://picsum.photos/id/1015/2000/1200') center/cover; 
     }
     .nav-scrolled { background-color: rgba(0, 0, 0, 0.95); }
-    .logo-img { height: 42px; width: auto; }
+    
+    /* Larger Signature Logo */
+    .logo-img { 
+      height: 58px; 
+      width: auto; 
+      max-width: 280px;
+    }
   </style>
 </head>
 <body class="bg-black text-white">
@@ -40,6 +46,7 @@
     </div>
   </nav>
 
+  <!-- Rest of the site (Hero, About with profile.png, Services, Contact, Footer) remains the same -->
   <!-- Hero -->
   <section class="hero-bg h-screen flex items-center">
     <div class="max-w-4xl mx-auto px-6 text-center">
@@ -56,7 +63,7 @@
     </div>
   </section>
 
-  <!-- About Section (with your profile.png) -->
+  <!-- About -->
   <section id="about" class="py-24 bg-zinc-950">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -80,8 +87,7 @@
           </div>
         </div>
         <div class="relative">
-          <img src="profile.PNG" alt="Edward Janes" class="rounded-3xl shadow-2xl w-full object-cover">
-          
+          <img src="profile.png" alt="Edward Janes" class="rounded-3xl shadow-2xl w-full object-cover">
           <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-emerald-500 rounded-2xl p-6 max-w-[220px]">
             <p class="italic text-sm">"The fastest way I've seen a founder go from idea to funded."</p>
             <p class="text-xs mt-4 text-emerald-400">- Recent Client</p>
@@ -91,7 +97,7 @@
     </div>
   </section>
 
-  <!-- Services, Contact, Footer (same as before) -->
+  <!-- Services, Contact, Footer (unchanged) -->
   <section id="services" class="py-24">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-5xl font-bold text-center mb-16">How I Help Founders</h2>
