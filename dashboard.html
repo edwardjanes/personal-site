@@ -773,6 +773,28 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h2>Daily Data</h2>
+                <div id="dailyDataContainer" style="overflow-x: auto; margin-top: 20px;">
+                    <table id="dailyDataTable" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead>
+                            <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Weight</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Belly</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Side</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Love Handle</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Fat</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Thin</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Average</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dailyDataBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div id="productivity-tab" style="display: none;">
@@ -857,6 +879,30 @@
                             <input type="number" id="todayWeight" step="0.1" placeholder="e.g., 82.5">
                         </div>
                         <div class="form-group">
+                            <label>Belly</label>
+                            <input type="number" id="todayBelly" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Side</label>
+                            <input type="number" id="todaySide" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Love Handle</label>
+                            <input type="number" id="todayLoveHandle" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Fat</label>
+                            <input type="number" id="todayFat" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Thin</label>
+                            <input type="number" id="todayThin" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Average</label>
+                            <input type="number" id="todayAverage" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
                             <label>Primary Focus Score</label>
                             <input type="number" id="todayPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
                         </div>
@@ -918,6 +964,30 @@
                         <div class="form-group">
                             <label>Weight (kg)</label>
                             <input type="number" id="historyWeight" step="0.1" placeholder="e.g., 82.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Belly</label>
+                            <input type="number" id="historyBelly" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Side</label>
+                            <input type="number" id="historySide" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Love Handle</label>
+                            <input type="number" id="historyLoveHandle" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Fat</label>
+                            <input type="number" id="historyFat" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Thin</label>
+                            <input type="number" id="historyThin" step="0.1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>Average</label>
+                            <input type="number" id="historyAverage" step="0.1" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>Primary Focus Score</label>
@@ -1040,6 +1110,32 @@
 
         let data = sampleData;
 
+        // Metric thresholds for color coding (minpoint=green, midpoint=yellow, maxpoint=red)
+        const metricThresholds = {
+          weight: { minpoint: null, midpoint: null, maxpoint: null },
+          belly: { minpoint: null, midpoint: null, maxpoint: null },
+          side: { minpoint: null, midpoint: null, maxpoint: null },
+          loveHandle: { minpoint: null, midpoint: null, maxpoint: null },
+          fat: { minpoint: null, midpoint: null, maxpoint: null },
+          thin: { minpoint: null, midpoint: null, maxpoint: null },
+          average: { minpoint: null, midpoint: null, maxpoint: null },
+        };
+
+        // Calculate color based on value and thresholds (3-point scale)
+        function getMetricColor(value, metric) {
+          const thresholds = metricThresholds[metric];
+          if (!thresholds || thresholds.minpoint === null) return '#e8e8e8'; // Gray if no threshold
+
+          const min = thresholds.minpoint;
+          const mid = thresholds.midpoint;
+          const max = thresholds.maxpoint;
+
+          if (value <= min) return '#4caf50'; // Green
+          if (value <= mid) return '#8bc34a'; // Light green
+          if (value <= max) return '#ff9800'; // Orange
+          return '#f44336'; // Red
+        }
+
         // Parse data from Google Sheets response
         function parseSheetData(rawData) {
             if (!Array.isArray(rawData)) {
@@ -1051,8 +1147,15 @@
                 .filter(row => row.date || row.day)
                 .map(row => ({
                     date: row.date || row.day || '',
+                    day: row.day || '',
                     focus: row.focus || 0,
                     weight: row.weight || 0,
+                    belly: row.belly || 0,
+                    side: row.side || 0,
+                    loveHandle: row.loveHandle || 0,
+                    fat: row.fat || 0,
+                    thin: row.thin || 0,
+                    average: row.average || 0,
                     steps: row.steps || 0,
                     sleep: row.sleep || 0,
                     blocks: row.blocks || 0,
@@ -1104,6 +1207,7 @@
             if (startInput && endInput) {
                 applyFilters();
             } else {
+                updateDailyData();
                 createCharts();
                 updateComparisonChart();
             }
@@ -1183,6 +1287,43 @@
                     document.getElementById('avgCaloriesComp').textContent = '—';
                 }
             }
+        }
+
+        function updateDailyData() {
+            const tbody = document.getElementById('dailyDataBody');
+            tbody.innerHTML = '';
+
+            const filteredData = data.filter(row => {
+                const rowDate = new Date(row.date);
+                return rowDate >= startDate && rowDate <= endDate;
+            }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            filteredData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #eee';
+
+                const dateCell = document.createElement('td');
+                dateCell.textContent = `${row.day} ${row.date}`;
+                dateCell.style.padding = '10px 12px';
+                dateCell.style.fontWeight = '500';
+                tr.appendChild(dateCell);
+
+                const metrics = ['weight', 'belly', 'side', 'loveHandle', 'fat', 'thin', 'average'];
+                metrics.forEach(metric => {
+                    const cell = document.createElement('td');
+                    const value = row[metric];
+                    const color = getMetricColor(value, metric);
+
+                    cell.style.padding = '10px 12px';
+                    cell.style.textAlign = 'center';
+                    cell.style.backgroundColor = color;
+                    cell.style.color = value > 0 ? '#000' : '#999';
+                    cell.textContent = value > 0 ? value.toFixed(1) : '—';
+                    tr.appendChild(cell);
+                });
+
+                tbody.appendChild(tr);
+            });
         }
 
         function createCharts() {
@@ -1516,6 +1657,7 @@
                 console.log('Filtered data:', filteredData.map(d => ({ date: d.date, focus: d.focus, weight: d.weight, steps: d.steps })));
             }
             calculateMetrics();
+            updateDailyData();
             updateComparisonChart();
             createCharts();
         }
@@ -1641,6 +1783,12 @@
                 return {
                     date: getTodayDate(),
                     weight: document.getElementById('todayWeight').value || undefined,
+                    belly: document.getElementById('todayBelly').value || undefined,
+                    side: document.getElementById('todaySide').value || undefined,
+                    loveHandle: document.getElementById('todayLoveHandle').value || undefined,
+                    fat: document.getElementById('todayFat').value || undefined,
+                    thin: document.getElementById('todayThin').value || undefined,
+                    average: document.getElementById('todayAverage').value || undefined,
                     primaryFocusScore: document.getElementById('todayPrimaryFocusScore').value || undefined,
                     sleep: document.getElementById('todaySleep').value || undefined,
                     steps: document.getElementById('todaySteps').value || undefined,
@@ -1657,6 +1805,12 @@
                 return {
                     date: document.getElementById('historyDate').value,
                     weight: document.getElementById('historyWeight').value || undefined,
+                    belly: document.getElementById('historyBelly').value || undefined,
+                    side: document.getElementById('historySide').value || undefined,
+                    loveHandle: document.getElementById('historyLoveHandle').value || undefined,
+                    fat: document.getElementById('historyFat').value || undefined,
+                    thin: document.getElementById('historyThin').value || undefined,
+                    average: document.getElementById('historyAverage').value || undefined,
                     primaryFocusScore: document.getElementById('historyPrimaryFocusScore').value || undefined,
                     sleep: document.getElementById('historySleep').value || undefined,
                     steps: document.getElementById('historySteps').value || undefined,
@@ -1682,7 +1836,7 @@
             const cleanData = {};
             for (const [key, value] of Object.entries(formData)) {
                 if (value !== undefined && value !== '') {
-                    if (['weight', 'primaryFocusScore', 'sleep', 'steps', 'calsIn', 'calsOut', 'blocks', 'investors', 'focus', 'secondaryFocus'].includes(key)) {
+                    if (['weight', 'belly', 'side', 'loveHandle', 'fat', 'thin', 'average', 'primaryFocusScore', 'sleep', 'steps', 'calsIn', 'calsOut', 'blocks', 'investors', 'focus', 'secondaryFocus'].includes(key)) {
                         cleanData[key] = parseFloat(value);
                     } else {
                         cleanData[key] = value;
@@ -1749,6 +1903,12 @@
 
         function clearTodayForm() {
             document.getElementById('todayWeight').value = '';
+            document.getElementById('todayBelly').value = '';
+            document.getElementById('todaySide').value = '';
+            document.getElementById('todayLoveHandle').value = '';
+            document.getElementById('todayFat').value = '';
+            document.getElementById('todayThin').value = '';
+            document.getElementById('todayAverage').value = '';
             document.getElementById('todayPrimaryFocusScore').value = '';
             document.getElementById('todaySleep').value = '';
             document.getElementById('todaySteps').value = '';
@@ -1767,6 +1927,12 @@
         function clearHistoryForm() {
             document.getElementById('historyDate').value = '';
             document.getElementById('historyWeight').value = '';
+            document.getElementById('historyBelly').value = '';
+            document.getElementById('historySide').value = '';
+            document.getElementById('historyLoveHandle').value = '';
+            document.getElementById('historyFat').value = '';
+            document.getElementById('historyThin').value = '';
+            document.getElementById('historyAverage').value = '';
             document.getElementById('historyPrimaryFocusScore').value = '';
             document.getElementById('historySleep').value = '';
             document.getElementById('historySteps').value = '';
