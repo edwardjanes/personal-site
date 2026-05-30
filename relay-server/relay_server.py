@@ -8,32 +8,13 @@ import os
 import sys
 
 GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznODbFe6_FMad_Y_NG7Zseq9kGxCzN0-6VFkHAHd6MCjKkHV2A2BwmOa6bLcQN50hY/exec'
-DASHBOARD_PATH = '/Users/edwardjanes/Documents/personal/dashboard.html'
 
 class RelayHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split('?')[0]
         print(f"\n>>> GET {path}", file=sys.stderr)
 
-        if path in ['/', '/dashboard.html']:
-            print(f"    Serving dashboard", file=sys.stderr)
-            try:
-                with open(DASHBOARD_PATH, 'rb') as f:
-                    content = f.read()
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/html')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(content)
-            except Exception as e:
-                print(f"    ERROR: {e}", file=sys.stderr)
-                self.send_response(500)
-                self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': str(e)}).encode())
-
-        elif path == '/api/get':
+        if path == '/api/get':
             print(f"    Forwarding to Google Apps Script", file=sys.stderr)
             try:
                 response = urllib.request.urlopen(GOOGLE_APPS_SCRIPT_URL, timeout=10)
