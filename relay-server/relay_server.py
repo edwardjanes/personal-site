@@ -103,15 +103,10 @@ class RelayHandler(http.server.BaseHTTPRequestHandler):
         pass
 
 if __name__ == '__main__':
-    PORT = 8080
-    print("Stopping any existing server on port 8080...", file=sys.stderr)
-    os.system('lsof -ti :8080 | xargs kill -9 2>/dev/null')
-    import time
-    time.sleep(0.5)
+    PORT = int(os.environ.get('PORT', 8080))
 
     with socketserver.TCPServer(("", PORT), RelayHandler) as httpd:
-        print(f"\n✓ Relay server running at http://localhost:{PORT}/", file=sys.stderr)
-        print(f"✓ GET  / → serves dashboard", file=sys.stderr)
+        print(f"\n✓ Relay server running on port {PORT}", file=sys.stderr)
         print(f"✓ GET  /api/get → forwards to Google Apps Script", file=sys.stderr)
         print(f"✓ POST /api/post → forwards to Google Apps Script\n", file=sys.stderr)
         httpd.serve_forever()
