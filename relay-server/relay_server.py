@@ -7,7 +7,7 @@ import urllib.error
 import os
 import sys
 
-GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxmVRffuYaonWmv1nOsyXcQSr9KYOYDZiincKuhpjMhsUWcliH7M_kjR8MnPIUH14eK/exec'
+GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwg5FUS-Lb41ZJhFD6BWEkfrfYq6Q7a2dNOcTC8mxoYTQfGlvkGinqi7eJMzBjJgpc/exec'
 
 class RelayServer(socketserver.TCPServer):
     allow_reuse_address = True
