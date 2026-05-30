@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Metrics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            color: white;
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+
+        .controls {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .control-group {
+            margin-bottom: 24px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .date-inputs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .date-inputs input {
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+
+        .date-inputs input:focus {
+            outline: none;
+            border-color: #4a9eff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+        }
+
+        .metrics-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #4a9eff;
+        }
+
+        .checkbox-wrapper label {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: normal;
+            cursor: pointer;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            padding: 0 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: none;
+        }
+
+        .tab-btn {
+            padding: 16px 28px !important;
+            background: transparent !important;
+            border: none !important;
+            cursor: pointer !important;
+            font-weight: 600 !important;
+            font-size: 15px !important;
+            transition: all 0.3s ease !important;
+            color: #999 !important;
+            border-bottom: 3px solid transparent !important;
+            position: relative;
+            top: 1px;
+        }
+
+        .tab-btn.active {
+            color: #0A0A0A !important;
+            border-bottom-color: #4a9eff !important;
+        }
+
+        .tab-btn:hover {
+            color: #555 !important;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 0 28px;
+            background: white;
+            margin-left: -28px;
+            margin-right: -28px;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: none;
+        }
+
+        #productivity-tab .metrics-grid {
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 28px;
+            padding-right: 28px;
+            border-radius: 12px 12px 0 0;
+            border-bottom: none;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f3f7 100%);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            background: linear-gradient(135deg, #f0f3f7 0%, #e8ecf3 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            font-weight: 700;
+        }
+
+        .metric-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0A0A0A;
+            line-height: 1.2;
+        }
+
+        .metric-change {
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .positive {
+            color: #16a34a;
+        }
+
+        .negative {
+            color: #dc2626;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 0 28px 24px 28px;
+            background: white;
+            margin-left: -28px;
+            margin-right: -28px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .comparison-box {
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .comparison-label {
+            font-size: 9px;
+            color: #999;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .comparison-value {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        button {
+            transition: all 0.2s ease;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #health-tab button, #productivity-tab button {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e5e5e5 100%) !important;
+            border: 1.5px solid #ddd !important;
+            font-weight: 600 !important;
+            padding: 10px 20px !important;
+            border-radius: 6px !important;
+            font-size: 13px !important;
+            color: #333 !important;
+            cursor: pointer !important;
+        }
+
+        #health-tab button:hover, #productivity-tab button:hover {
+            background: linear-gradient(135deg, #e5e5e5 0%, #d9d9d9 100%) !important;
+            border-color: #999 !important;
+        }
+
+        .controls button {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%) !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .controls button:hover {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%) !important;
+        }
+
+        .auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .auth-screen.hidden {
+            display: none;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .auth-container h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #0A0A0A;
+            font-weight: 700;
+        }
+
+        .auth-container p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .auth-input-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-input-group label {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+
+        .auth-input-group input:focus {
+            outline: none;
+            border-color: #4a9eff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .auth-button:hover {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+
+        .auth-button:active {
+            transform: scale(0.98);
+        }
+
+        .auth-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .auth-error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <h2>Personal Metrics</h2>
+            <p>Enter your password to view your dashboard</p>
+            <div id="authError" class="auth-error"></div>
+            <div class="auth-input-group">
+                <label for="authPassword">Password</label>
+                <input type="password" id="authPassword" placeholder="Enter password" autocomplete="off">
+            </div>
+            <button class="auth-button" onclick="authenticateUser()">Unlock Dashboard</button>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <h1>2026 Personal Metrics Dashboard</h1>
+            <p class="subtitle">Productivity • Health • Fitness • Finance</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>📅 Quick Date Presets</label>
+                <div class="date-inputs">
+                    <button onclick="setDateRange('thisWeek')" style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px;">This Week</button>
+                    <button onclick="setDateRange('lastWeek')" style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px;">Last Week</button>
+                    <button onclick="setDateRange('thisMonth')" style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px;">This Month</button>
+                    <button onclick="setDateRange('lastMonth')" style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px;">Last Month</button>
+                    <button onclick="setDateRange('thisYear')" style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px;">This Year</button>
+                    <button onclick="setDateRange('allTime')" style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px;">All Time</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>📅 Custom Date Range</label>
+                <div class="date-inputs">
+                    <input type="date" id="startDate" placeholder="Start date">
+                    <span>to</span>
+                    <input type="date" id="endDate" placeholder="End date">
+                    <button onclick="applyFilters()" style="padding: 8px 20px; background: #0A0A0A; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Apply</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>📊 Compare Metrics (select 2-4)</label>
+                <div class="metrics-selector">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="metric-focus" onchange="updateComparisonChart()">
+                        <label for="metric-focus">Focus Score</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="metric-weight" onchange="updateComparisonChart()">
+                        <label for="metric-weight">Weight (kg)</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="metric-steps" onchange="updateComparisonChart()">
+                        <label for="metric-steps">Steps</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="metric-sleep" onchange="updateComparisonChart()">
+                        <label for="metric-sleep">Sleep (hours)</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="metric-blocks" onchange="updateComparisonChart()">
+                        <label for="metric-blocks">Blocks</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="metric-investors" onchange="updateComparisonChart()">
+                        <label for="metric-investors">Investors</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('health')">Health</button>
+            <button class="tab-btn" onclick="switchTab('productivity')">Productivity</button>
+        </div>
+
+        <div id="health-tab">
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Start Weight</div>
+                    <div class="metric-value" id="startWeight">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Current Weight</div>
+                    <div class="metric-value" id="currentWeight">—</div>
+                    <div class="metric-change" id="weightDelta"></div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Avg Weight</div>
+                    <div class="metric-value" id="avgWeight">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Avg Calories In</div>
+                    <div class="metric-value" id="avgCalsIn">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Avg Calories Out</div>
+                    <div class="metric-value" id="avgCalsOut">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Avg Calorie Deficit</div>
+                    <div class="metric-value" id="avgCalories">—</div>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-box">
+                    <div class="comparison-label">Start Weight</div>
+                    <div class="comparison-value" id="startWeightComp">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Weight</div>
+                    <div class="comparison-value" id="avgWeightComp">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Calories In</div>
+                    <div class="comparison-value" id="avgCalsInComp">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Calories Out</div>
+                    <div class="comparison-value" id="avgCalsOutComp">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Calorie Deficit</div>
+                    <div class="comparison-value" id="avgCaloriesComp">—</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h2>Weight Progression</h2>
+                    <div class="chart-container">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Daily Steps</h2>
+                    <div class="chart-container">
+                        <canvas id="stepsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Sleep Duration</h2>
+                    <div class="chart-container">
+                        <canvas id="sleepChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Caloric Deficit Trend</h2>
+                    <div class="chart-container">
+                        <canvas id="calorieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="productivity-tab" style="display: none;">
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Avg Primary Focus</div>
+                    <div class="metric-value" id="avgFocus">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Total Tasks Done</div>
+                    <div class="metric-value" id="totalTasks">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Avg Focus Score</div>
+                    <div class="metric-value" id="avgFocusScore">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Avg Secondary Focus</div>
+                    <div class="metric-value" id="avgSecondaryFocus">—</div>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Focus vs Last Period</div>
+                    <div class="comparison-value" id="compFocusChange2">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Total Tasks vs Last Period</div>
+                    <div class="comparison-value" id="compTasksChange2">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Focus Score vs Last Period</div>
+                    <div class="comparison-value" id="compFocusScoreChange">—</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-label">Avg Secondary Focus vs Last Period</div>
+                    <div class="comparison-value" id="compSecondaryFocusChange">—</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h2>Focus Score Trend</h2>
+                    <div class="chart-container">
+                        <canvas id="focusChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Primary Focus Score Trend</h2>
+                    <div class="chart-container">
+                        <canvas id="primaryFocusScoreChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Tasks Completed</h2>
+                    <div class="chart-container">
+                        <canvas id="tasksChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Focus vs Productivity</h2>
+                    <div class="chart-container">
+                        <canvas id="correlationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== PASSWORD AUTHENTICATION =====
+        const DASHBOARD_PASSWORD = 'metrics2026'; // Change this to your desired password
+
+        function authenticateUser() {
+            const passwordInput = document.getElementById('authPassword');
+            const errorEl = document.getElementById('authError');
+            const password = passwordInput.value;
+
+            if (password === DASHBOARD_PASSWORD) {
+                // Store auth in session storage (cleared when browser closes)
+                sessionStorage.setItem('dashboardAuth', 'authenticated');
+                document.getElementById('authScreen').classList.add('hidden');
+                loadData();
+            } else {
+                errorEl.textContent = 'Incorrect password. Please try again.';
+                errorEl.classList.add('show');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('authPassword');
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    authenticateUser();
+                }
+            });
+
+            // Check if already authenticated
+            if (sessionStorage.getItem('dashboardAuth') === 'authenticated') {
+                document.getElementById('authScreen').classList.add('hidden');
+            } else {
+                passwordInput.focus();
+            }
+        });
+
+        // ===== DASHBOARD =====
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrzurG8WnN4mdyT3ecmg8b7F_LyfgH0w4LK2FUiGls7_vTQfcX5j8FAO_uiydki3g6/exec';
+
+        // Fallback sample data if API fails
+        const sampleData = [
+            { date: '1/1/26', focus: 7, weight: 86.50, steps: 0, sleep: 0, blocks: 0, investors: 0, calories: -700, calsIn: 0, calsOut: 0, primaryFocusScore: 0, secondaryFocus: 0 },
+            { date: '2/1/26', focus: 7, weight: 86.30, steps: 0, sleep: 0, blocks: 0, investors: 0, calories: -700, calsIn: 0, calsOut: 0, primaryFocusScore: 0, secondaryFocus: 0 },
+            { date: '3/1/26', focus: 6, weight: 86.00, steps: 0, sleep: 0, blocks: 0, investors: 0, calories: -700, calsIn: 0, calsOut: 0, primaryFocusScore: 0, secondaryFocus: 0 },
+            { date: '4/1/26', focus: 7, weight: 88.00, steps: 0, sleep: 0, blocks: 0, investors: 0, calories: -700, calsIn: 0, calsOut: 0, primaryFocusScore: 0, secondaryFocus: 0 },
+            { date: '8/1/26', focus: 6, weight: 86.70, steps: 8060, sleep: 6.5, blocks: 1, investors: 4, calories: -1144, calsIn: 2400, calsOut: 3544, primaryFocusScore: 5, secondaryFocus: 4 },
+            { date: '9/1/26', focus: 6, weight: 86.70, steps: 7529, sleep: 6.8, blocks: 0, investors: 5, calories: -1200, calsIn: 2300, calsOut: 3500, primaryFocusScore: 5, secondaryFocus: 4 },
+            { date: '26/1/26', focus: 8, weight: 85.95, steps: 7027, sleep: 7.0, blocks: 1, investors: 1, calories: 176, calsIn: 2500, calsOut: 2324, primaryFocusScore: 7, secondaryFocus: 5 },
+            { date: '2/2/26', focus: 6, weight: 85.65, steps: 11895, sleep: 6.9, blocks: 0, investors: 0, calories: -694, calsIn: 2400, calsOut: 3094, primaryFocusScore: 6, secondaryFocus: 4 },
+            { date: '3/2/26', focus: 6, weight: 85.65, steps: 12183, sleep: 6.7, blocks: 1, investors: 0, calories: -870, calsIn: 2300, calsOut: 3170, primaryFocusScore: 6, secondaryFocus: 4 },
+            { date: '4/2/26', focus: 7, weight: 85.65, steps: 14723, sleep: 7.8, blocks: 0, investors: 0, calories: -1259, calsIn: 2200, calsOut: 3459, primaryFocusScore: 7, secondaryFocus: 5 },
+            { date: '16/2/26', focus: 7, weight: 85.10, steps: 11545, sleep: 7.0, blocks: 0, investors: 0, calories: -632, calsIn: 2400, calsOut: 3032, primaryFocusScore: 7, secondaryFocus: 5 },
+            { date: '25/5/26', focus: 8, weight: 80.54, steps: 14958, sleep: 7.9, blocks: 0, investors: 1, calories: -6389, calsIn: 2000, calsOut: 8389, primaryFocusScore: 8, secondaryFocus: 6 },
+        ];
+
+        let data = sampleData;
+
+        // Parse data from Google Sheets response
+        function parseSheetData(rawData) {
+            if (!Array.isArray(rawData)) {
+                console.warn('Invalid data format:', rawData);
+                return sampleData;
+            }
+
+            return rawData
+                .filter(row => row.date || row.day)
+                .map(row => ({
+                    date: row.date || row.day || '',
+                    focus: row.focus || 0,
+                    weight: row.weight || 0,
+                    steps: row.steps || 0,
+                    sleep: row.sleep || 0,
+                    blocks: row.blocks || 0,
+                    investors: row.investors || 0,
+                    calories: row.calories || 0,
+                    calsIn: row.calsIn || 0,
+                    calsOut: row.calsOut || 0,
+                    primaryFocusScore: row.primaryFocusScore || 0,
+                    secondaryFocus: row.secondaryFocus || 0,
+                    primaryFocusStart: row.primaryFocusStart || '',
+                    primaryFocusEnd: row.primaryFocusEnd || '',
+                }))
+                .filter(row => row.focus > 0 || row.weight > 0 || row.steps > 0 || row.sleep > 0 || row.primaryFocusScore > 0 || row.blocks > 0);
+        }
+
+        // Fetch data from Google Apps Script
+        async function loadData() {
+            try {
+                console.log('Fetching from:', APPS_SCRIPT_URL);
+                const response = await fetch(APPS_SCRIPT_URL);
+                const rawData = await response.json();
+                console.log('Raw data received:', rawData);
+                console.log('Data type:', typeof rawData, 'Is array:', Array.isArray(rawData));
+
+                if (Array.isArray(rawData) && rawData.length > 0) {
+                    console.log('First row:', rawData[0]);
+                    console.log('Total rows from API:', rawData.length);
+                    console.log('Sample dates:', rawData.slice(0, 5).map(r => r.date));
+                }
+
+                data = parseSheetData(rawData);
+                console.log('✓ Parsed', data.length, 'rows from Google Sheet');
+                console.log('Date range in data:', data.length > 0 ? `${data[0].date} to ${data[data.length-1].date}` : 'no data');
+
+                if (data.length === 0) {
+                    console.warn('No data parsed, using sample data');
+                    data = sampleData;
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                console.warn('Using sample data');
+                data = sampleData;
+            }
+
+            calculateMetrics();
+            // Reapply current filters to new data
+            const startInput = document.getElementById('startDate').value;
+            const endInput = document.getElementById('endDate').value;
+            if (startInput && endInput) {
+                applyFilters();
+            } else {
+                createCharts();
+                updateComparisonChart();
+            }
+        }
+
+        function calculateMetrics() {
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+
+            const weights = dataToUse.filter(d => d.weight > 0).map(d => d.weight);
+            const focusScores = dataToUse.filter(d => d.focus > 0).map(d => d.focus);
+            const caloriesList = dataToUse.filter(d => d.calories !== null && d.calories !== undefined).map(d => d.calories);
+            const calsInList = dataToUse.filter(d => d.calsIn > 0).map(d => d.calsIn);
+            const calsOutList = dataToUse.filter(d => d.calsOut > 0).map(d => d.calsOut);
+            const tasksList = dataToUse.filter(d => d.blocks > 0).map(d => d.blocks);
+            const primaryFocusScoreList = dataToUse.filter(d => d.primaryFocusScore > 0).map(d => d.primaryFocusScore);
+            const secondaryFocusList = dataToUse.filter(d => d.secondaryFocus > 0).map(d => d.secondaryFocus);
+
+            const startWeight = weights.length > 0 ? weights[0].toFixed(1) : '—';
+            const currentWeight = weights.length > 0 ? weights[weights.length - 1].toFixed(1) : '—';
+            const weightDelta = weights.length > 1 ? (weights[weights.length - 1] - weights[0]).toFixed(1) : 0;
+            const avgWeight = weights.length > 0 ? (weights.reduce((a,b) => a+b) / weights.length).toFixed(1) : '—';
+            const avgFocus = focusScores.length > 0 ? (focusScores.reduce((a,b) => a+b) / focusScores.length).toFixed(1) : '—';
+            const avgCalories = caloriesList.length > 0 ? Math.round(caloriesList.reduce((a,b) => a+b) / caloriesList.length).toLocaleString() : '—';
+            const avgCalsIn = calsInList.length > 0 ? Math.round(calsInList.reduce((a,b) => a+b) / calsInList.length).toLocaleString() : '—';
+            const avgCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length).toLocaleString() : '—';
+            const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
+            const avgFocusScore = primaryFocusScoreList.length > 0 ? (primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length).toFixed(1) : '—';
+            const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
+
+            // Health tab metrics
+            document.getElementById('startWeight').textContent = startWeight + ' kg';
+            document.getElementById('currentWeight').textContent = currentWeight + ' kg';
+            document.getElementById('weightDelta').textContent = weightDelta !== 0 ? (weightDelta < 0 ? `${weightDelta} kg` : `+${weightDelta} kg`) : '';
+            document.getElementById('weightDelta').className = 'metric-change ' + (weightDelta < 0 ? 'positive' : (weightDelta > 0 ? 'negative' : ''));
+            document.getElementById('avgWeight').textContent = avgWeight + ' kg';
+            document.getElementById('avgCalories').textContent = avgCalories;
+            document.getElementById('avgCalsIn').textContent = avgCalsIn;
+            document.getElementById('avgCalsOut').textContent = avgCalsOut;
+
+            // Productivity tab metrics
+            document.getElementById('avgFocus').textContent = avgFocus;
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('avgFocusScore').textContent = avgFocusScore;
+            document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
+
+            // Display second row health metrics from previous period
+            const startInput = document.getElementById('startDate').value;
+            const endInput = document.getElementById('endDate').value;
+            if (startInput && endInput) {
+                const startDate = parseInputDate(startInput);
+                const endDate = parseInputDate(endInput);
+                const lastPeriodData = getLastPeriodData(startDate, endDate);
+
+                if (lastPeriodData.length > 0) {
+                    const lastWeights = lastPeriodData.filter(d => d.weight > 0).map(d => d.weight);
+                    const lastCalsIn = lastPeriodData.filter(d => d.calsIn > 0).map(d => d.calsIn);
+                    const lastCalsOut = lastPeriodData.filter(d => d.calsOut > 0).map(d => d.calsOut);
+                    const lastCalories = lastPeriodData.filter(d => d.calories !== null && d.calories !== undefined).map(d => d.calories);
+
+                    const lastStartWeight = lastWeights.length > 0 ? lastWeights[0].toFixed(1) : '—';
+                    const lastAvgWeight = lastWeights.length > 0 ? (lastWeights.reduce((a,b) => a+b) / lastWeights.length).toFixed(1) : '—';
+                    const lastAvgCalsIn = lastCalsIn.length > 0 ? Math.round(lastCalsIn.reduce((a,b) => a+b) / lastCalsIn.length).toLocaleString() : '—';
+                    const lastAvgCalsOut = lastCalsOut.length > 0 ? Math.round(lastCalsOut.reduce((a,b) => a+b) / lastCalsOut.length).toLocaleString() : '—';
+                    const lastAvgCalories = lastCalories.length > 0 ? Math.round(lastCalories.reduce((a,b) => a+b) / lastCalories.length).toLocaleString() : '—';
+
+                    document.getElementById('startWeightComp').textContent = lastStartWeight + ' kg';
+                    document.getElementById('avgWeightComp').textContent = lastAvgWeight + ' kg';
+                    document.getElementById('avgCalsInComp').textContent = lastAvgCalsIn;
+                    document.getElementById('avgCalsOutComp').textContent = lastAvgCalsOut;
+                    document.getElementById('avgCaloriesComp').textContent = lastAvgCalories;
+                } else {
+                    // No previous period data available
+                    document.getElementById('startWeightComp').textContent = '—';
+                    document.getElementById('avgWeightComp').textContent = '—';
+                    document.getElementById('avgCalsInComp').textContent = '—';
+                    document.getElementById('avgCalsOutComp').textContent = '—';
+                    document.getElementById('avgCaloriesComp').textContent = '—';
+                }
+            }
+        }
+
+        function createCharts() {
+            // Destroy existing chart instances
+            Object.values(chartInstances).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            chartInstances = {};
+
+            const colors = {
+                primary: '#3b82f6',
+                success: '#16a34a',
+                danger: '#dc2626',
+                warning: '#ea580c'
+            };
+
+            const chartData = filteredData.length > 0 ? filteredData : data;
+
+            // Focus Score Chart
+            chartInstances.focus = new Chart(document.getElementById('focusChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Focus Score',
+                        data: chartData.map(d => d.focus > 0 ? d.focus : null),
+                        borderColor: colors.primary,
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: colors.primary
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Weight Chart
+            chartInstances.weight = new Chart(document.getElementById('weightChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Weight (kg)',
+                        data: chartData.map(d => d.weight > 0 ? d.weight : null),
+                        borderColor: colors.danger,
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: colors.danger
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Steps Chart
+            chartInstances.steps = new Chart(document.getElementById('stepsChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Steps',
+                        data: chartData.map(d => d.steps > 0 ? d.steps : null),
+                        backgroundColor: colors.warning,
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            // Sleep Chart
+            chartInstances.sleep = new Chart(document.getElementById('sleepChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Sleep (hours)',
+                        data: chartData.map(d => d.sleep > 0 ? d.sleep : null),
+                        backgroundColor: colors.success,
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 10 } } }
+            });
+
+            // Focus vs Blocks Correlation
+            const focusBlockData = chartData.filter(d => d.focus > 0 && d.blocks >= 0);
+            chartInstances.correlation = new Chart(document.getElementById('correlationChart'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Focus vs Blocks',
+                        data: focusBlockData.map(d => ({ x: d.focus, y: d.blocks })),
+                        backgroundColor: colors.primary,
+                        pointRadius: 6
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Focus Score' } }, y: { title: { display: true, text: 'Blocks Completed' } } } }
+            });
+
+            // Calorie Deficit Chart
+            chartInstances.calories = new Chart(document.getElementById('calorieChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Caloric Deficit',
+                        data: chartData.map(d => d.calories || null),
+                        backgroundColor: (ctx) => ctx.raw < 0 ? colors.success : colors.danger,
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            // Primary Focus Score Chart
+            chartInstances.primaryFocusScore = new Chart(document.getElementById('primaryFocusScoreChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Primary Focus Score',
+                        data: chartData.map(d => d.primaryFocusScore > 0 ? d.primaryFocusScore : null),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Tasks Completed Chart
+            chartInstances.tasks = new Chart(document.getElementById('tasksChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Tasks',
+                        data: chartData.map(d => d.blocks > 0 ? d.blocks : null),
+                        backgroundColor: colors.success,
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        let filteredData = [];
+        let comparisonChartInstance = null;
+        let chartInstances = {};  // Track all chart instances
+
+        // Convert date format from "D/M/YY" or Date string to comparable format
+        function parseDataDate(dateStr) {
+            if (!dateStr) return null;
+            // Try D/M/YY format first: "1/1/26" -> new Date(2026, 0, 1)
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0]);
+                const month = parseInt(parts[1]) - 1;
+                const year = 2000 + parseInt(parts[2]);
+                const d = new Date(year, month, day);
+                if (!isNaN(d)) return d;
+            }
+            // Try parsing as JavaScript Date string: "Thu Jan 01 2026 00:00:00..."
+            const d = new Date(dateStr);
+            if (!isNaN(d)) return d;
+            return null;
+        }
+
+        // Convert HTML date format to Date object
+        function parseInputDate(dateStr) {
+            if (!dateStr) return null;
+            return new Date(dateStr + 'T00:00:00');
+        }
+
+        function setDateRange(preset) {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            let start, end;
+
+            switch(preset) {
+                case 'thisWeek':
+                    start = new Date(today);
+                    start.setDate(today.getDate() - today.getDay());
+                    end = new Date(today);
+                    break;
+                case 'lastWeek':
+                    end = new Date(today);
+                    end.setDate(today.getDate() - today.getDay() - 1);
+                    start = new Date(end);
+                    start.setDate(end.getDate() - 6);
+                    break;
+                case 'thisMonth':
+                    start = new Date(currentYear, today.getMonth(), 1);
+                    end = new Date(today);
+                    break;
+                case 'lastMonth':
+                    start = new Date(currentYear, today.getMonth() - 1, 1);
+                    end = new Date(currentYear, today.getMonth(), 0);
+                    break;
+                case 'thisYear':
+                    start = new Date(currentYear, 0, 1);
+                    end = new Date(today);
+                    break;
+                case 'allTime':
+                    start = null;
+                    end = null;
+                    break;
+            }
+
+            // Set input fields
+            if (start) document.getElementById('startDate').value = start.toISOString().split('T')[0];
+            else document.getElementById('startDate').value = '';
+
+            if (end) document.getElementById('endDate').value = end.toISOString().split('T')[0];
+            else document.getElementById('endDate').value = '';
+
+            applyFilters();
+        }
+
+        function getLastPeriodData(startDate, endDate) {
+            if (!startDate || !endDate) return [];
+
+            const periodLength = endDate - startDate;
+            const lastPeriodEnd = new Date(startDate);
+            lastPeriodEnd.setTime(lastPeriodEnd.getTime() - 86400000); // Go back 1 day to avoid overlap
+            const lastPeriodStart = new Date(lastPeriodEnd);
+            lastPeriodStart.setTime(lastPeriodStart.getTime() - periodLength);
+
+            return data.filter(row => {
+                if (!row.date) return false;
+                const rowDate = parseDataDate(row.date);
+                if (!rowDate) return false;
+                return rowDate >= lastPeriodStart && rowDate <= lastPeriodEnd;
+            });
+        }
+
+        function getFilteredData() {
+            const startInput = document.getElementById('startDate').value;
+            const endInput = document.getElementById('endDate').value;
+
+            const startDate = startInput ? parseInputDate(startInput) : null;
+            const endDate = endInput ? parseInputDate(endInput) : null;
+
+            const filtered = data.filter(row => {
+                if (!row.date) return false;
+                const rowDate = parseDataDate(row.date);
+                if (!rowDate) return false;
+
+                if (startDate && rowDate < startDate) return false;
+                if (endDate && rowDate > endDate) return false;
+                return true;
+            });
+
+            // Always fill date gaps to show complete timeline
+            if (filtered.length > 0) {
+                return fillDateGaps(filtered, startDate, endDate);
+            }
+
+            return filtered;
+        }
+
+        function fillDateGaps(dataArray, startDate, endDate) {
+            if (dataArray.length === 0) return [];
+
+            // Create a map of dates to data
+            const dataMap = {};
+            dataArray.forEach(row => {
+                dataMap[row.date] = row;
+            });
+
+            // Get date range - use first/last data dates if not provided
+            let start = startDate ? new Date(startDate) : parseDataDate(dataArray[0].date);
+            let end = endDate ? new Date(endDate) : parseDataDate(dataArray[dataArray.length - 1].date);
+
+            // Ensure we have valid dates
+            if (!start) start = parseDataDate(dataArray[0].date);
+            if (!end) end = parseDataDate(dataArray[dataArray.length - 1].date);
+
+            // Generate all dates in range
+            const result = [];
+            const current = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+            const endDt = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+            while (current <= endDt) {
+                // Format as D/M/YY to match data format
+                const day = current.getDate();
+                const month = current.getMonth() + 1;
+                const year = current.getFullYear() % 100;
+                const dateStr = day + '/' + month + '/' + year;
+
+                if (dataMap[dateStr]) {
+                    result.push(dataMap[dateStr]);
+                } else {
+                    // Add empty row for this date
+                    result.push({
+                        date: dateStr,
+                        focus: null,
+                        weight: null,
+                        steps: null,
+                        sleep: null,
+                        blocks: null,
+                        investors: null,
+                        calories: null
+                    });
+                }
+                current.setDate(current.getDate() + 1);
+            }
+
+            console.log('Filled gaps:', result.length, 'rows from', result[0]?.date, 'to', result[result.length-1]?.date);
+            return result;
+        }
+
+        function applyFilters() {
+            const startInput = document.getElementById('startDate').value;
+            const endInput = document.getElementById('endDate').value;
+
+            filteredData = getFilteredData();
+            console.log('Filter range:', startInput, 'to', endInput);
+            console.log('Total data points:', data.length);
+            console.log('Filtered to', filteredData.length, 'rows');
+            if (filteredData.length > 0) {
+                console.log('Filtered date range:', filteredData[0].date, 'to', filteredData[filteredData.length-1].date);
+                console.log('Filtered data:', filteredData.map(d => ({ date: d.date, focus: d.focus, weight: d.weight, steps: d.steps })));
+            }
+            calculateMetrics();
+            updateComparisonChart();
+            createCharts();
+        }
+
+        function updateComparisonChart() {
+            const metricsToShow = [
+                { id: 'focus', key: 'focus', label: 'Focus Score', color: '#3b82f6' },
+                { id: 'weight', key: 'weight', label: 'Weight (kg)', color: '#dc2626' },
+                { id: 'steps', key: 'steps', label: 'Steps', color: '#ea580c' },
+                { id: 'sleep', key: 'sleep', label: 'Sleep (h)', color: '#16a34a' },
+                { id: 'blocks', key: 'blocks', label: 'Blocks', color: '#8b5cf6' },
+                { id: 'investors', key: 'investors', label: 'Investors', color: '#06b6d4' },
+            ].filter(m => document.getElementById('metric-' + m.id).checked);
+
+            if (metricsToShow.length === 0) {
+                console.log('No metrics selected');
+                return;
+            }
+
+            const baseData = filteredData.length > 0 ? filteredData : data;
+            const chartData = baseData.filter(row => metricsToShow.some(m => row[m.key] > 0));
+
+            if (chartData.length === 0) {
+                console.log('No data for selected filters');
+                return;
+            }
+
+            // Normalize data to 0-100 scale for comparison
+            const normalized = {};
+            metricsToShow.forEach(metric => {
+                const values = chartData.map(d => d[metric.key]).filter(v => v > 0);
+                if (values.length > 0) {
+                    const min = Math.min(...values);
+                    const max = Math.max(...values);
+                    const range = max - min || 1;
+                    normalized[metric.key] = chartData.map(d => {
+                        const val = d[metric.key];
+                        return (val && val > 0) ? ((val - min) / range) * 100 : null;
+                    });
+                }
+            });
+
+            const datasets = metricsToShow.map((metric, idx) => ({
+                label: metric.label,
+                data: normalized[metric.key] || [],
+                borderColor: metric.color,
+                backgroundColor: metric.color + '20',
+                tension: 0.4,
+                fill: false,
+                borderWidth: 2,
+                pointRadius: 3,
+            }));
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Metrics Normalized to 0-100 Scale' }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                maxTicksLimit: 8,
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                        },
+                        y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
+                    }
+                }
+            };
+
+            const ctx = document.getElementById('comparisonChart');
+            if (comparisonChartInstance) comparisonChartInstance.destroy();
+            comparisonChartInstance = new Chart(ctx, chartConfig);
+        }
+
+        function switchTab(tabName) {
+            const healthTab = document.getElementById('health-tab');
+            const productivityTab = document.getElementById('productivity-tab');
+            const buttons = document.querySelectorAll('.tab-btn');
+
+            if (tabName === 'health') {
+                healthTab.style.display = 'block';
+                productivityTab.style.display = 'none';
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                healthTab.style.display = 'none';
+                productivityTab.style.display = 'block';
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // Initialize - load data from Google Sheet
+        loadData();
+
+        // Set default date range to "This Month" on load
+        setTimeout(() => {
+            setDateRange('thisMonth');
+        }, 500);
+    </script>
+</body>
+</html>
