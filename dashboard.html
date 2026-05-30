@@ -438,6 +438,179 @@
         .auth-error.show {
             display: block;
         }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4a9eff;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .form-actions button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .form-actions button:hover {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+
+        .form-actions button.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .form-actions button.secondary:hover {
+            background: #e5e5e5;
+        }
+
+        .form-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-message.success {
+            display: block;
+            background: rgba(22, 163, 74, 0.1);
+            color: #16a34a;
+        }
+
+        .form-message.error {
+            display: block;
+            background: rgba(220, 38, 38, 0.1);
+            color: #dc2626;
+        }
+
+        .entry-section {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .entry-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        .form-group input {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0A0A0A;
+            box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 12px 20px;
+            background: #0A0A0A;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: #333;
+        }
+
+        .btn-clear {
+            padding: 12px 20px;
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-clear:hover {
+            background: #e5e5e5;
+        }
+
+        #entry-tab {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -516,6 +689,7 @@
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('health')">Health</button>
             <button class="tab-btn" onclick="switchTab('productivity')">Productivity</button>
+            <button class="tab-btn" onclick="switchTab('entry')">Add Data</button>
         </div>
 
         <div id="health-tab">
@@ -670,6 +844,134 @@
                 </div>
             </div>
         </div>
+
+        <div id="entry-tab" style="display: none;">
+            <div class="entry-section">
+                <h2>Add Data Entry</h2>
+
+                <div style="margin-bottom: 30px;">
+                    <h3>Today's Entry</h3>
+                    <form onsubmit="submitMetricsData(event, true)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="form-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="todayWeight" step="0.1" placeholder="e.g., 82.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Score</label>
+                            <input type="number" id="todayPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Sleep (hours)</label>
+                            <input type="number" id="todaySleep" step="0.5" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Steps</label>
+                            <input type="number" id="todaySteps" placeholder="e.g., 10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals In</label>
+                            <input type="number" id="todayCalsIn" placeholder="e.g., 2000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals Out</label>
+                            <input type="number" id="todayCalsOut" placeholder="e.g., 2700">
+                        </div>
+                        <div class="form-group">
+                            <label>Tasks Completed</label>
+                            <input type="number" id="todayBlocks" placeholder="e.g., 3">
+                        </div>
+                        <div class="form-group">
+                            <label>Investors Approached</label>
+                            <input type="number" id="todayInvestors" placeholder="e.g., 2">
+                        </div>
+                        <div class="form-group">
+                            <label>Focus (1-10)</label>
+                            <input type="number" id="todayFocus" min="1" max="10" placeholder="e.g., 8">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary Focus</label>
+                            <input type="number" id="todaySecondaryFocus" step="0.1" placeholder="e.g., 6.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Start</label>
+                            <input type="text" id="todayPrimaryFocusStart" placeholder="e.g., Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus End</label>
+                            <input type="text" id="todayPrimaryFocusEnd" placeholder="e.g., Coding">
+                        </div>
+                        <div class="form-actions" style="grid-column: 1 / -1;">
+                            <button type="submit" class="btn-submit">Save Today's Data</button>
+                            <button type="button" class="btn-clear" onclick="clearTodayForm()">Clear</button>
+                        </div>
+                    </form>
+                    <div class="form-message" id="todayMessage"></div>
+                </div>
+
+                <div>
+                    <h3>Historical Entry</h3>
+                    <form onsubmit="submitMetricsData(event, false)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="form-group">
+                            <label>Date (D/M/YY)</label>
+                            <input type="text" id="historyDate" placeholder="e.g., 28/5/26" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="historyWeight" step="0.1" placeholder="e.g., 82.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Score</label>
+                            <input type="number" id="historyPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Sleep (hours)</label>
+                            <input type="number" id="historySleep" step="0.5" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Steps</label>
+                            <input type="number" id="historySteps" placeholder="e.g., 10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals In</label>
+                            <input type="number" id="historyCalsIn" placeholder="e.g., 2000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals Out</label>
+                            <input type="number" id="historyCalsOut" placeholder="e.g., 2700">
+                        </div>
+                        <div class="form-group">
+                            <label>Tasks Completed</label>
+                            <input type="number" id="historyBlocks" placeholder="e.g., 3">
+                        </div>
+                        <div class="form-group">
+                            <label>Investors Approached</label>
+                            <input type="number" id="historyInvestors" placeholder="e.g., 2">
+                        </div>
+                        <div class="form-group">
+                            <label>Focus (1-10)</label>
+                            <input type="number" id="historyFocus" min="1" max="10" placeholder="e.g., 8">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary Focus</label>
+                            <input type="number" id="historySecondaryFocus" step="0.1" placeholder="e.g., 6.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Start</label>
+                            <input type="text" id="historyPrimaryFocusStart" placeholder="e.g., Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus End</label>
+                            <input type="text" id="historyPrimaryFocusEnd" placeholder="e.g., Coding">
+                        </div>
+                        <div class="form-actions" style="grid-column: 1 / -1;">
+                            <button type="submit" class="btn-submit">Save Entry</button>
+                            <button type="button" class="btn-clear" onclick="clearHistoryForm()">Clear</button>
+                        </div>
+                    </form>
+                    <div class="form-message" id="historyMessage"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -712,7 +1014,13 @@
         });
 
         // ===== DASHBOARD =====
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrzurG8WnN4mdyT3ecmg8b7F_LyfgH0w4LK2FUiGls7_vTQfcX5j8FAO_uiydki3g6/exec';
+        // API configuration - works both locally and on deployed servers
+        const API_BASE = window.location.hostname === 'localhost'
+          ? 'http://localhost:8080'
+          : 'https://personal-site-relay.railway.app';
+
+        const APPS_SCRIPT_URL = `${API_BASE}/api/get`;
+        const APPS_SCRIPT_POST_URL = `${API_BASE}/api/post`;
 
         // Fallback sample data if API fails
         const sampleData = [
@@ -1295,19 +1603,183 @@
         function switchTab(tabName) {
             const healthTab = document.getElementById('health-tab');
             const productivityTab = document.getElementById('productivity-tab');
+            const entryTab = document.getElementById('entry-tab');
             const buttons = document.querySelectorAll('.tab-btn');
 
+            // Hide all tabs
+            healthTab.style.display = 'none';
+            productivityTab.style.display = 'none';
+            entryTab.style.display = 'none';
+
+            // Remove active from all buttons
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab and mark button as active
             if (tabName === 'health') {
                 healthTab.style.display = 'block';
-                productivityTab.style.display = 'none';
                 buttons[0].classList.add('active');
-                buttons[1].classList.remove('active');
-            } else {
-                healthTab.style.display = 'none';
+            } else if (tabName === 'productivity') {
                 productivityTab.style.display = 'block';
-                buttons[0].classList.remove('active');
                 buttons[1].classList.add('active');
+            } else if (tabName === 'entry') {
+                entryTab.style.display = 'block';
+                buttons[2].classList.add('active');
             }
+        }
+
+        // ===== DATA ENTRY FUNCTIONS =====
+        function getTodayDate() {
+            const today = new Date();
+            const d = today.getDate();
+            const m = today.getMonth() + 1;
+            const y = today.getFullYear() % 100;
+            return `${d}/${m}/${y}`;
+        }
+
+        function collectFormData(isToday) {
+            if (isToday) {
+                return {
+                    date: getTodayDate(),
+                    weight: document.getElementById('todayWeight').value || undefined,
+                    primaryFocusScore: document.getElementById('todayPrimaryFocusScore').value || undefined,
+                    sleep: document.getElementById('todaySleep').value || undefined,
+                    steps: document.getElementById('todaySteps').value || undefined,
+                    calsIn: document.getElementById('todayCalsIn').value || undefined,
+                    calsOut: document.getElementById('todayCalsOut').value || undefined,
+                    blocks: document.getElementById('todayBlocks').value || undefined,
+                    investors: document.getElementById('todayInvestors').value || undefined,
+                    focus: document.getElementById('todayFocus').value || undefined,
+                    secondaryFocus: document.getElementById('todaySecondaryFocus').value || undefined,
+                    primaryFocusStart: document.getElementById('todayPrimaryFocusStart').value || undefined,
+                    primaryFocusEnd: document.getElementById('todayPrimaryFocusEnd').value || undefined,
+                };
+            } else {
+                return {
+                    date: document.getElementById('historyDate').value,
+                    weight: document.getElementById('historyWeight').value || undefined,
+                    primaryFocusScore: document.getElementById('historyPrimaryFocusScore').value || undefined,
+                    sleep: document.getElementById('historySleep').value || undefined,
+                    steps: document.getElementById('historySteps').value || undefined,
+                    calsIn: document.getElementById('historyCalsIn').value || undefined,
+                    calsOut: document.getElementById('historyCalsOut').value || undefined,
+                    blocks: document.getElementById('historyBlocks').value || undefined,
+                    investors: document.getElementById('historyInvestors').value || undefined,
+                    focus: document.getElementById('historyFocus').value || undefined,
+                    secondaryFocus: document.getElementById('historySecondaryFocus').value || undefined,
+                    primaryFocusStart: document.getElementById('historyPrimaryFocusStart').value || undefined,
+                    primaryFocusEnd: document.getElementById('historyPrimaryFocusEnd').value || undefined,
+                };
+            }
+        }
+
+        async function submitMetricsData(event, isToday) {
+            event.preventDefault();
+
+            const formData = collectFormData(isToday);
+            const messageEl = isToday ? document.getElementById('todayMessage') : document.getElementById('historyMessage');
+
+            // Clean up undefined values and convert strings to numbers where appropriate
+            const cleanData = {};
+            for (const [key, value] of Object.entries(formData)) {
+                if (value !== undefined && value !== '') {
+                    if (['weight', 'primaryFocusScore', 'sleep', 'steps', 'calsIn', 'calsOut', 'blocks', 'investors', 'focus', 'secondaryFocus'].includes(key)) {
+                        cleanData[key] = parseFloat(value);
+                    } else {
+                        cleanData[key] = value;
+                    }
+                }
+            }
+
+            if (!cleanData.date) {
+                messageEl.textContent = 'Date is required';
+                messageEl.classList.add('error');
+                messageEl.classList.remove('success');
+                return;
+            }
+
+            console.log('Sending data:', cleanData);
+            console.log('To URL:', APPS_SCRIPT_POST_URL);
+
+            try {
+                const response = await fetch(APPS_SCRIPT_POST_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(cleanData)
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+
+                const result = await response.json();
+                console.log('Response data:', result);
+
+                if (result.success) {
+                    messageEl.textContent = `✓ Data saved for ${cleanData.date}`;
+                    messageEl.classList.add('success');
+                    messageEl.classList.remove('error');
+
+                    // Clear form after successful submission
+                    if (isToday) {
+                        clearTodayForm();
+                    } else {
+                        clearHistoryForm();
+                    }
+
+                    // Reload data after a short delay
+                    setTimeout(() => {
+                        loadData();
+                    }, 500);
+                } else {
+                    messageEl.textContent = `Error: ${result.error || 'Unknown error'}`;
+                    messageEl.classList.add('error');
+                    messageEl.classList.remove('success');
+                }
+            } catch (error) {
+                console.error('Full error:', error);
+                console.error('Error name:', error.name);
+                console.error('Error message:', error.message);
+                console.error('Error stack:', error.stack);
+                messageEl.textContent = `Error: ${error.message}`;
+                messageEl.classList.add('error');
+                messageEl.classList.remove('success');
+            }
+        }
+
+        function clearTodayForm() {
+            document.getElementById('todayWeight').value = '';
+            document.getElementById('todayPrimaryFocusScore').value = '';
+            document.getElementById('todaySleep').value = '';
+            document.getElementById('todaySteps').value = '';
+            document.getElementById('todayCalsIn').value = '';
+            document.getElementById('todayCalsOut').value = '';
+            document.getElementById('todayBlocks').value = '';
+            document.getElementById('todayInvestors').value = '';
+            document.getElementById('todayFocus').value = '';
+            document.getElementById('todaySecondaryFocus').value = '';
+            document.getElementById('todayPrimaryFocusStart').value = '';
+            document.getElementById('todayPrimaryFocusEnd').value = '';
+            document.getElementById('todayMessage').textContent = '';
+            document.getElementById('todayMessage').classList.remove('error', 'success');
+        }
+
+        function clearHistoryForm() {
+            document.getElementById('historyDate').value = '';
+            document.getElementById('historyWeight').value = '';
+            document.getElementById('historyPrimaryFocusScore').value = '';
+            document.getElementById('historySleep').value = '';
+            document.getElementById('historySteps').value = '';
+            document.getElementById('historyCalsIn').value = '';
+            document.getElementById('historyCalsOut').value = '';
+            document.getElementById('historyBlocks').value = '';
+            document.getElementById('historyInvestors').value = '';
+            document.getElementById('historyFocus').value = '';
+            document.getElementById('historySecondaryFocus').value = '';
+            document.getElementById('historyPrimaryFocusStart').value = '';
+            document.getElementById('historyPrimaryFocusEnd').value = '';
+            document.getElementById('historyMessage').textContent = '';
+            document.getElementById('historyMessage').classList.remove('error', 'success');
         }
 
         // Initialize - load data from Google Sheet
