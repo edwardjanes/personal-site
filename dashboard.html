@@ -1293,10 +1293,25 @@
             const tbody = document.getElementById('dailyDataBody');
             tbody.innerHTML = '';
 
+            // Parse date string in d/M/yy format
+            function parseDate(dateStr) {
+                const parts = dateStr.split('/');
+                if (parts.length !== 3) return null;
+                const day = parseInt(parts[0]);
+                const month = parseInt(parts[1]) - 1; // Month is 0-indexed
+                const year = 2000 + parseInt(parts[2]);
+                return new Date(year, month, day);
+            }
+
             const filteredData = data.filter(row => {
-                const rowDate = new Date(row.date);
+                const rowDate = parseDate(row.date);
+                if (!rowDate) return false;
                 return rowDate >= startDate && rowDate <= endDate;
-            }).sort((a, b) => new Date(a.date) - new Date(b.date));
+            }).sort((a, b) => {
+                const dateA = parseDate(a.date);
+                const dateB = parseDate(b.date);
+                return dateA - dateB;
+            });
 
             filteredData.forEach(row => {
                 const tr = document.createElement('tr');
