@@ -1,1 +1,1 @@
-web: cd relay-server && python3 relay_server.py
+web: python3 relay-server/relay_server.py
