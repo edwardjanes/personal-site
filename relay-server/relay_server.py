@@ -9,6 +9,9 @@ import sys
 
 GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznODbFe6_FMad_Y_NG7Zseq9kGxCzN0-6VFkHAHd6MCjKkHV2A2BwmOa6bLcQN50hY/exec'
 
+class RelayServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
 class RelayHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split('?')[0]
@@ -105,7 +108,7 @@ class RelayHandler(http.server.BaseHTTPRequestHandler):
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 8080))
 
-    with socketserver.TCPServer(("", PORT), RelayHandler) as httpd:
+    with RelayServer(("", PORT), RelayHandler) as httpd:
         print(f"\n✓ Relay server running on port {PORT}", file=sys.stderr)
         print(f"✓ GET  /api/get → forwards to Google Apps Script", file=sys.stderr)
         print(f"✓ POST /api/post → forwards to Google Apps Script\n", file=sys.stderr)
