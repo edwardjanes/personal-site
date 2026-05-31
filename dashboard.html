@@ -731,16 +731,16 @@
                 </div>
 
                 <div class="card">
-                    <h2>Daily Steps</h2>
+                    <h2>Caliper Readings</h2>
                     <div class="chart-container">
-                        <canvas id="stepsChart"></canvas>
+                        <canvas id="caliperChart"></canvas>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>Sleep Duration</h2>
+                    <h2>Waist Readings</h2>
                     <div class="chart-container">
-                        <canvas id="sleepChart"></canvas>
+                        <canvas id="waistChart"></canvas>
                     </div>
                 </div>
 
@@ -1228,33 +1228,61 @@
             });
 
             // Steps Chart
-            chartInstances.steps = new Chart(document.getElementById('stepsChart'), {
-                type: 'bar',
+            // Caliper Readings Chart
+            chartInstances.caliper = new Chart(document.getElementById('caliperChart'), {
+                type: 'line',
                 data: {
                     labels: chartData.map(d => d.date),
-                    datasets: [{
-                        label: 'Steps',
-                        data: chartData.map(d => d.steps > 0 ? d.steps : null),
-                        backgroundColor: colors.warning,
-                        borderRadius: 4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Belly',
+                            data: chartData.map(d => d.belly > 0 ? d.belly : null),
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Side',
+                            data: chartData.map(d => d.side > 0 ? d.side : null),
+                            borderColor: '#f97316',
+                            backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Love Handle',
+                            data: chartData.map(d => d.loveHandle > 0 ? d.loveHandle : null),
+                            borderColor: '#eab308',
+                            backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
             });
 
-            // Sleep Chart
-            chartInstances.sleep = new Chart(document.getElementById('sleepChart'), {
-                type: 'bar',
+            // Waist Readings Chart
+            chartInstances.waist = new Chart(document.getElementById('waistChart'), {
+                type: 'line',
                 data: {
                     labels: chartData.map(d => d.date),
-                    datasets: [{
-                        label: 'Sleep (hours)',
-                        data: chartData.map(d => d.sleep > 0 ? d.sleep : null),
-                        backgroundColor: colors.success,
-                        borderRadius: 4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Fat',
+                            data: chartData.map(d => d.fat > 0 ? d.fat : null),
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Thin',
+                            data: chartData.map(d => d.thin > 0 ? d.thin : null),
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 10 } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
             });
 
             // Focus vs Blocks Correlation
