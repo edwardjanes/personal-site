@@ -1238,22 +1238,31 @@
                             label: 'Belly',
                             data: chartData.map(d => d.belly > 0 ? d.belly : null),
                             borderColor: '#ef4444',
+                            borderWidth: 2,
                             backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                            tension: 0.4
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#ef4444'
                         },
                         {
                             label: 'Side',
                             data: chartData.map(d => d.side > 0 ? d.side : null),
                             borderColor: '#f97316',
+                            borderWidth: 2,
                             backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                            tension: 0.4
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#f97316'
                         },
                         {
                             label: 'Love Handle',
                             data: chartData.map(d => d.loveHandle > 0 ? d.loveHandle : null),
                             borderColor: '#eab308',
+                            borderWidth: 2,
                             backgroundColor: 'rgba(234, 179, 8, 0.1)',
-                            tension: 0.4
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#eab308'
                         },
                         {
                             label: 'Total',
