@@ -781,6 +781,7 @@
                 <div class="metric-box">
                     <div class="metric-label">Average Focus Score</div>
                     <div class="metric-value" id="avgFocusScore">—</div>
+                    <div class="metric-change" id="focusScoreDelta"></div>
                 </div>
                 <div class="metric-box">
                     <div class="metric-label">Total Tasks Complete</div>
@@ -1141,6 +1142,11 @@
             const avgFocusScore = primaryFocusScoreList.length > 0 ? ((primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length) * 10).toFixed(1) : '—';
             const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
 
+            // Calculate focus score delta (up is good for productivity)
+            const startAvgFocusScore = primaryFocusScoreList.length > 0 ? primaryFocusScoreList[0] : null;
+            const endAvgFocusScore = primaryFocusScoreList.length > 0 ? primaryFocusScoreList[primaryFocusScoreList.length - 1] : null;
+            const focusScoreDelta = startAvgFocusScore && endAvgFocusScore ? (endAvgFocusScore - startAvgFocusScore).toFixed(1) : null;
+
             // Health tab metrics
             document.getElementById('startWeight').textContent = startWeight + ' kg';
             document.getElementById('currentWeight').textContent = currentWeight + ' kg';
@@ -1155,6 +1161,11 @@
             document.getElementById('avgFocus').textContent = avgFocus;
             document.getElementById('totalTasks').textContent = totalTasks;
             document.getElementById('avgFocusScore').textContent = avgFocusScore !== '—' ? avgFocusScore + '%' : '—';
+            // Display focus score delta (up is good for productivity - green for positive)
+            if (focusScoreDelta !== null) {
+                document.getElementById('focusScoreDelta').textContent = focusScoreDelta !== 0 ? (focusScoreDelta > 0 ? `+${focusScoreDelta}` : `${focusScoreDelta}`) : '';
+                document.getElementById('focusScoreDelta').className = 'metric-change ' + (focusScoreDelta > 0 ? 'positive' : (focusScoreDelta < 0 ? 'negative' : ''));
+            }
             document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
 
             // Display second row health metrics from previous period
