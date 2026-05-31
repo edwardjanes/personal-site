@@ -1686,7 +1686,7 @@
                     <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
                     <td style="padding: 10px 12px; text-align: center;">${calsOut > 0 ? calsOut.toLocaleString() : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${calsIn > 0 ? calsIn.toLocaleString() : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center;">${deficit > 0 ? deficit.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${deficit !== 0 ? deficit.toLocaleString() : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${protein > 0 ? protein.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${proteinPerKg > 0 ? proteinPerKg.toFixed(2) : '—'}</td>
                 </tr>`;
