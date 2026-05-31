@@ -829,6 +829,7 @@
                         <thead>
                             <tr style="border-bottom: 2px solid #ddd; background: #f9f9f9;">
                                 <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Primary Focus (1-10)</th>
                                 <th style="padding: 12px; text-align: center; font-weight: 600;">Primary Focus Score</th>
                                 <th style="padding: 12px; text-align: center; font-weight: 600;">Secondary Focus</th>
                                 <th style="padding: 12px; text-align: center; font-weight: 600;">Tasks Done</th>
@@ -1504,6 +1505,7 @@
             dataToUse.forEach(row => {
                 if (!row.date) return;
 
+                const focus = row.focus || 0;
                 const primaryFocusScore = row.primaryFocusScore || 0;
                 const secondaryFocus = row.secondaryFocus || 0;
                 const tasks = row.blocks || 0;
@@ -1512,6 +1514,7 @@
 
                 html += `<tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${focus > 0 ? focus.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${primaryFocusScore > 0 ? primaryFocusScore.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${secondaryFocus > 0 ? secondaryFocus.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${tasks > 0 ? tasks.toFixed(0) : '—'}</td>
