@@ -1860,7 +1860,9 @@
             dataToUse.forEach(row => {
                 Object.keys(row).forEach(key => allColumns.add(key));
             });
-            const columns = Array.from(allColumns).sort();
+            let columns = Array.from(allColumns).sort();
+            columns = columns.filter(c => c !== 'date');
+            columns.unshift('date');
             console.log('Extracted columns:', columns.length, columns);
 
             if (Object.keys(rawDataVisibleColumns).length === 0) {
@@ -1872,8 +1874,10 @@
             const visibleCols = columns.filter(col => rawDataVisibleColumns[col]);
 
             let headerHtml = '<tr style="border-bottom: 2px solid #ddd;">';
-            visibleCols.forEach(col => {
-                headerHtml += `<th style="padding: 12px; text-align: left; font-weight: 600; cursor: pointer; user-select: none; background: #f9f9f9;" onclick="sortRawDataByColumn('${col}')">${col} ${rawDataSortColumn === col ? (rawDataSortAscending ? '▲' : '▼') : ''}</th>`;
+            visibleCols.forEach((col, idx) => {
+                const isDateCol = idx === 0;
+                const style = isDateCol ? 'padding: 12px; text-align: left; font-weight: 600; cursor: pointer; user-select: none; background: #f9f9f9; position: sticky; left: 0; z-index: 2;' : 'padding: 12px; text-align: left; font-weight: 600; cursor: pointer; user-select: none; background: #f9f9f9;';
+                headerHtml += `<th style="${style}" onclick="sortRawDataByColumn('${col}')">${col} ${rawDataSortColumn === col ? (rawDataSortAscending ? '▲' : '▼') : ''}</th>`;
             });
             headerHtml += '</tr>';
             document.getElementById('rawDataHeader').innerHTML = headerHtml;
@@ -1891,10 +1895,12 @@
             let bodyHtml = '';
             sorted.forEach(row => {
                 bodyHtml += '<tr style="border-bottom: 1px solid #eee;">';
-                visibleCols.forEach(col => {
+                visibleCols.forEach((col, idx) => {
                     const value = row[col];
                     const display = value === null || value === undefined || value === '' ? '—' : (typeof value === 'number' ? value.toFixed(2) : String(value));
-                    bodyHtml += `<td style="padding: 10px 12px; text-align: left; font-size: 13px;">${display}</td>`;
+                    const isDateCol = idx === 0;
+                    const style = isDateCol ? 'padding: 10px 12px; text-align: left; font-size: 13px; position: sticky; left: 0; background: white; z-index: 1;' : 'padding: 10px 12px; text-align: left; font-size: 13px;';
+                    bodyHtml += `<td style="${style}">${display}</td>`;
                 });
                 bodyHtml += '</tr>';
             });
