@@ -708,7 +708,7 @@
                     <div class="metric-value" id="avgWeight">—</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label">Avg Calories In</div>
+                    <div class="metric-label">Current Caliper</div>
                     <div class="metric-value" id="avgCalsIn">—</div>
                 </div>
                 <div class="metric-box">
@@ -731,7 +731,7 @@
                     <div class="comparison-value" id="avgWeightComp">—</div>
                 </div>
                 <div class="comparison-box">
-                    <div class="comparison-label">Avg Calories In</div>
+                    <div class="comparison-label">Current Caliper</div>
                     <div class="comparison-value" id="avgCalsInComp">—</div>
                 </div>
                 <div class="comparison-box">
@@ -1151,7 +1151,8 @@
             const avgWeight = weights.length > 0 ? (weights.reduce((a,b) => a+b) / weights.length).toFixed(1) : '—';
             const avgFocus = focusScores.length > 0 ? (focusScores.reduce((a,b) => a+b) / focusScores.length).toFixed(1) : '—';
             const avgCalories = caloriesList.length > 0 ? Math.round(caloriesList.reduce((a,b) => a+b) / caloriesList.length).toLocaleString() : '—';
-            const avgCalsIn = calsInList.length > 0 ? Math.round(calsInList.reduce((a,b) => a+b) / calsInList.length).toLocaleString() : '—';
+            const currentCaliper = dataToUse.length > 0 ? ((dataToUse[dataToUse.length - 1].belly || 0) + (dataToUse[dataToUse.length - 1].side || 0) + (dataToUse[dataToUse.length - 1].loveHandle || 0)).toFixed(1) : '—';
+            const avgCalsIn = currentCaliper;
             const avgCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length).toLocaleString() : '—';
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
             const avgFocusScore = primaryFocusScoreList.length > 0 ? (primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length).toFixed(1) : '—';
@@ -1189,7 +1190,8 @@
 
                     const lastStartWeight = lastWeights.length > 0 ? lastWeights[0].toFixed(1) : '—';
                     const lastAvgWeight = lastWeights.length > 0 ? (lastWeights.reduce((a,b) => a+b) / lastWeights.length).toFixed(1) : '—';
-                    const lastAvgCalsIn = lastCalsIn.length > 0 ? Math.round(lastCalsIn.reduce((a,b) => a+b) / lastCalsIn.length).toLocaleString() : '—';
+                    const lastCaliper = lastPeriodData.length > 0 ? ((lastPeriodData[lastPeriodData.length - 1].belly || 0) + (lastPeriodData[lastPeriodData.length - 1].side || 0) + (lastPeriodData[lastPeriodData.length - 1].loveHandle || 0)).toFixed(1) : '—';
+                    const lastAvgCalsIn = lastCaliper;
                     const lastAvgCalsOut = lastCalsOut.length > 0 ? Math.round(lastCalsOut.reduce((a,b) => a+b) / lastCalsOut.length).toLocaleString() : '—';
                     const lastAvgCalories = lastCalories.length > 0 ? Math.round(lastCalories.reduce((a,b) => a+b) / lastCalories.length).toLocaleString() : '—';
 
