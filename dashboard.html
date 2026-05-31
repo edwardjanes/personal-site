@@ -1957,12 +1957,14 @@
         function switchTab(tabName) {
             const healthTab = document.getElementById('health-tab');
             const productivityTab = document.getElementById('productivity-tab');
+            const nutritionTab = document.getElementById('nutrition-tab');
             const entryTab = document.getElementById('entry-tab');
             const buttons = document.querySelectorAll('.tab-btn');
 
             // Hide all tabs
             healthTab.style.display = 'none';
             productivityTab.style.display = 'none';
+            nutritionTab.style.display = 'none';
             entryTab.style.display = 'none';
 
             // Remove active from all buttons
@@ -1975,9 +1977,12 @@
             } else if (tabName === 'productivity') {
                 productivityTab.style.display = 'block';
                 buttons[1].classList.add('active');
+            } else if (tabName === 'nutrition') {
+                nutritionTab.style.display = 'block';
+                buttons[2].classList.add('active');
             } else if (tabName === 'entry') {
                 entryTab.style.display = 'block';
-                buttons[2].classList.add('active');
+                buttons[3].classList.add('active');
             }
         }
 
