@@ -1849,7 +1849,7 @@
         let rawDataVisibleColumns = {};
 
         function updateRawDataTable() {
-            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            const dataToUse = data;
             if (dataToUse.length === 0) {
                 document.getElementById('rawDataBody').innerHTML = '';
                 return;
