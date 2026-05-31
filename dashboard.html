@@ -1293,15 +1293,34 @@
                             label: 'Fat',
                             data: chartData.map(d => d.fat > 0 ? d.fat : null),
                             borderColor: '#8b5cf6',
+                            borderWidth: 2,
                             backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            tension: 0.4
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#8b5cf6',
+                            spanGaps: true
                         },
                         {
                             label: 'Thin',
                             data: chartData.map(d => d.thin > 0 ? d.thin : null),
                             borderColor: '#06b6d4',
+                            borderWidth: 2,
                             backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                            tension: 0.4
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#06b6d4',
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Average',
+                            data: chartData.map(d => (d.fat > 0 || d.thin > 0) ? ((d.fat + d.thin) / 2) : null),
+                            borderColor: '#000000',
+                            borderWidth: 3,
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#000000',
+                            spanGaps: true
                         }
                     ]
                 },
