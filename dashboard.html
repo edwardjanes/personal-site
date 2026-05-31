@@ -712,7 +712,7 @@
                     <div class="metric-value" id="avgCalsIn">—</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label">Avg Calories Out</div>
+                    <div class="metric-label">Waist</div>
                     <div class="metric-value" id="avgCalsOut">—</div>
                 </div>
                 <div class="metric-box">
@@ -735,7 +735,7 @@
                     <div class="comparison-value" id="avgCalsInComp">—</div>
                 </div>
                 <div class="comparison-box">
-                    <div class="comparison-label">Avg Calories Out</div>
+                    <div class="comparison-label">Waist</div>
                     <div class="comparison-value" id="avgCalsOutComp">—</div>
                 </div>
                 <div class="comparison-box">
@@ -1154,7 +1154,9 @@
             const caliperRow = dataToUse.slice().reverse().find(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0));
             const currentCaliper = caliperRow ? ((caliperRow.belly || 0) + (caliperRow.side || 0) + (caliperRow.loveHandle || 0)).toFixed(1) : '—';
             const avgCalsIn = currentCaliper;
-            const avgCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length).toLocaleString() : '—';
+            const waistRow = dataToUse.slice().reverse().find(d => (d.fat > 0 || d.thin > 0));
+            const waist = waistRow ? (((waistRow.fat || 0) + (waistRow.thin || 0)) / 2).toFixed(1) : '—';
+            const avgCalsOut = waist;
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
             const avgFocusScore = primaryFocusScoreList.length > 0 ? (primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length).toFixed(1) : '—';
             const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
@@ -1194,7 +1196,9 @@
                     const lastCaliperRow = lastPeriodData.slice().reverse().find(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0));
                     const lastCaliper = lastCaliperRow ? ((lastCaliperRow.belly || 0) + (lastCaliperRow.side || 0) + (lastCaliperRow.loveHandle || 0)).toFixed(1) : '—';
                     const lastAvgCalsIn = lastCaliper;
-                    const lastAvgCalsOut = lastCalsOut.length > 0 ? Math.round(lastCalsOut.reduce((a,b) => a+b) / lastCalsOut.length).toLocaleString() : '—';
+                    const lastWaistRow = lastPeriodData.slice().reverse().find(d => (d.fat > 0 || d.thin > 0));
+                    const lastWaist = lastWaistRow ? (((lastWaistRow.fat || 0) + (lastWaistRow.thin || 0)) / 2).toFixed(1) : '—';
+                    const lastAvgCalsOut = lastWaist;
                     const lastAvgCalories = lastCalories.length > 0 ? Math.round(lastCalories.reduce((a,b) => a+b) / lastCalories.length).toLocaleString() : '—';
 
                     document.getElementById('startWeightComp').textContent = lastStartWeight + ' kg';
