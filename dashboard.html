@@ -686,6 +686,7 @@
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('health')">Health</button>
             <button class="tab-btn" onclick="switchTab('productivity')">Productivity</button>
+            <button class="tab-btn" onclick="switchTab('nutrition')">Nutrition</button>
             <button class="tab-btn" onclick="switchTab('entry')">Add Data</button>
         </div>
 
@@ -839,6 +840,62 @@
                             </tr>
                         </thead>
                         <tbody id="productivityDailyDataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="nutrition-tab" style="display: none;">
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Average Cals In</div>
+                    <div class="metric-value" id="avgCalsIn">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Cals Out</div>
+                    <div class="metric-value" id="avgCalsOut">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Defecit</div>
+                    <div class="metric-value" id="avgCalsDefecit">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Protein</div>
+                    <div class="metric-value" id="avgProtein">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Protein per KG</div>
+                    <div class="metric-value" id="avgProteinPerKg">—</div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
+                    <div class="chart-container">
+                        <canvas id="calsOutChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="calsInChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <h2>Daily Data</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #ddd; background: #f9f9f9;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Cals Out</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Cals In</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Cal Defecit</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Protein (g)</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Protein per KG</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nutritionDailyDataTable">
                         </tbody>
                     </table>
                 </div>
@@ -1061,6 +1118,8 @@
                     calories: row.calories || 0,
                     calsIn: row.calsIn || 0,
                     calsOut: row.calsOut || 0,
+                    protein: row.protein || 0,
+                    proteinPerKg: row.proteinPerKg || 0,
                     primaryFocusScore: row.primaryFocusScore || 0,
                     secondaryFocus: row.secondaryFocus || 0,
                     primaryFocusStart: row.primaryFocusStart || '',
@@ -1109,6 +1168,7 @@
                 updateComparisonChart();
                 updateDailyData();
                 updateProductivityDailyData();
+                updateNutritionDailyData();
             }
         }
 
@@ -1137,6 +1197,15 @@
             const waist = waistRow ? (((waistRow.fat || 0) + (waistRow.thin || 0)) / 2).toFixed(1) : '—';
             const avgCalsOut = waist;
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
+
+            // Nutrition metrics
+            const proteinList = dataToUse.filter(d => d.protein > 0).map(d => d.protein);
+            const proteinPerKgList = dataToUse.filter(d => d.proteinPerKg > 0).map(d => d.proteinPerKg);
+            const avgNutritionCalsIn = calsInList.length > 0 ? Math.round(calsInList.reduce((a,b) => a+b) / calsInList.length) : '—';
+            const avgNutritionCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length) : '—';
+            const avgNutritionDefecit = caloriesList.length > 0 ? Math.round(caloriesList.reduce((a,b) => a+b) / caloriesList.length) : '—';
+            const avgNutritionProtein = proteinList.length > 0 ? (proteinList.reduce((a,b) => a+b) / proteinList.length).toFixed(1) : '—';
+            const avgNutritionProteinPerKg = proteinPerKgList.length > 0 ? (proteinPerKgList.reduce((a,b) => a+b) / proteinPerKgList.length).toFixed(2) : '—';
 
             // Calculate average focus score from primary focus score values (out of 100%)
             const avgFocusScore = primaryFocusScoreList.length > 0 ? ((primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length) * 100).toFixed(1) : '—';
@@ -1167,6 +1236,13 @@
                 document.getElementById('focusScoreDelta').className = 'metric-change ' + (focusScoreDelta > 0 ? 'positive' : (focusScoreDelta < 0 ? 'negative' : ''));
             }
             document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
+
+            // Nutrition tab metrics
+            document.getElementById('avgCalsIn').textContent = typeof avgNutritionCalsIn === 'number' ? avgNutritionCalsIn.toLocaleString() : avgNutritionCalsIn;
+            document.getElementById('avgCalsOut').textContent = typeof avgNutritionCalsOut === 'number' ? avgNutritionCalsOut.toLocaleString() : avgNutritionCalsOut;
+            document.getElementById('avgCalsDefecit').textContent = typeof avgNutritionDefecit === 'number' ? avgNutritionDefecit.toLocaleString() : avgNutritionDefecit;
+            document.getElementById('avgProtein').textContent = avgNutritionProtein;
+            document.getElementById('avgProteinPerKg').textContent = avgNutritionProteinPerKg;
 
             // Display second row health metrics from previous period
             const startInput = document.getElementById('startDate').value;
@@ -1415,6 +1491,42 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
+
+            // Calories Out Chart
+            chartInstances.calsOut = new Chart(document.getElementById('calsOutChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Calories Out',
+                        data: chartData.map(d => d.calsOut > 0 ? d.calsOut : null),
+                        backgroundColor: '#ef4444',
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Calories In Chart
+            chartInstances.calsIn = new Chart(document.getElementById('calsInChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Calories In',
+                        data: chartData.map(d => d.calsIn > 0 ? d.calsIn : null),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#3b82f6',
+                        spanGaps: true
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
         }
 
         function updateDailyData() {
@@ -1533,6 +1645,44 @@
                     <td style="padding: 10px 12px; text-align: center;">${tasks > 0 ? tasks.toFixed(0) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${focusStart}</td>
                     <td style="padding: 10px 12px; text-align: center;">${focusEnd}</td>
+                </tr>`;
+            });
+            tableBody.innerHTML = html;
+        }
+
+        function updateNutritionDailyData() {
+            const tableBody = document.getElementById('nutritionDailyDataTable');
+            if (!tableBody) {
+                console.log('Nutrition daily data table not found');
+                return;
+            }
+
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            console.log('updateNutritionDailyData - dataToUse length:', dataToUse.length);
+
+            if (dataToUse.length === 0) {
+                tableBody.innerHTML = '';
+                console.log('No data to display');
+                return;
+            }
+
+            let html = '';
+            dataToUse.forEach(row => {
+                if (!row.date) return;
+
+                const calsOut = row.calsOut || 0;
+                const calsIn = row.calsIn || 0;
+                const deficit = row.calories || 0;
+                const protein = row.protein || 0;
+                const proteinPerKg = row.proteinPerKg || 0;
+
+                html += `<tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${calsOut > 0 ? calsOut.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${calsIn > 0 ? calsIn.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${deficit > 0 ? deficit.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${protein > 0 ? protein.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${proteinPerKg > 0 ? proteinPerKg.toFixed(2) : '—'}</td>
                 </tr>`;
             });
             tableBody.innerHTML = html;
@@ -1721,6 +1871,7 @@
             createCharts();
             updateDailyData();
             updateProductivityDailyData();
+            updateNutritionDailyData();
         }
 
         function updateComparisonChart() {
