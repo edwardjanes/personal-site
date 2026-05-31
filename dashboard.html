@@ -850,23 +850,23 @@
             <div class="metrics-grid">
                 <div class="metric-box">
                     <div class="metric-label">Average Cals In</div>
-                    <div class="metric-value" id="avgCalsIn">—</div>
+                    <div class="metric-value" id="nutritionAvgCalsIn">—</div>
                 </div>
                 <div class="metric-box">
                     <div class="metric-label">Average Cals Out</div>
-                    <div class="metric-value" id="avgCalsOut">—</div>
+                    <div class="metric-value" id="nutritionAvgCalsOut">—</div>
                 </div>
                 <div class="metric-box">
                     <div class="metric-label">Average Defecit</div>
-                    <div class="metric-value" id="avgCalsDefecit">—</div>
+                    <div class="metric-value" id="nutritionAvgCalsDefecit">—</div>
                 </div>
                 <div class="metric-box">
                     <div class="metric-label">Average Protein</div>
-                    <div class="metric-value" id="avgProtein">—</div>
+                    <div class="metric-value" id="nutritionAvgProtein">—</div>
                 </div>
                 <div class="metric-box">
                     <div class="metric-label">Average Protein per KG</div>
-                    <div class="metric-value" id="avgProteinPerKg">—</div>
+                    <div class="metric-value" id="nutritionAvgProteinPerKg">—</div>
                 </div>
             </div>
 
@@ -1244,11 +1244,11 @@
             document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
 
             // Nutrition tab metrics
-            document.getElementById('avgCalsIn').textContent = typeof avgNutritionCalsIn === 'number' ? avgNutritionCalsIn.toLocaleString() : avgNutritionCalsIn;
-            document.getElementById('avgCalsOut').textContent = typeof avgNutritionCalsOut === 'number' ? avgNutritionCalsOut.toLocaleString() : avgNutritionCalsOut;
-            document.getElementById('avgCalsDefecit').textContent = typeof avgNutritionDefecit === 'number' ? avgNutritionDefecit.toLocaleString() : avgNutritionDefecit;
-            document.getElementById('avgProtein').textContent = avgNutritionProtein;
-            document.getElementById('avgProteinPerKg').textContent = avgNutritionProteinPerKg;
+            document.getElementById('nutritionAvgCalsIn').textContent = typeof avgNutritionCalsIn === 'number' ? avgNutritionCalsIn.toLocaleString() : avgNutritionCalsIn;
+            document.getElementById('nutritionAvgCalsOut').textContent = typeof avgNutritionCalsOut === 'number' ? avgNutritionCalsOut.toLocaleString() : avgNutritionCalsOut;
+            document.getElementById('nutritionAvgCalsDefecit').textContent = typeof avgNutritionDefecit === 'number' ? avgNutritionDefecit.toLocaleString() : avgNutritionDefecit;
+            document.getElementById('nutritionAvgProtein').textContent = avgNutritionProtein;
+            document.getElementById('nutritionAvgProteinPerKg').textContent = avgNutritionProteinPerKg;
 
             // Display second row health metrics from previous period
             const startInput = document.getElementById('startDate').value;
