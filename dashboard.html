@@ -1225,6 +1225,71 @@
             }
         }
 
+        const highlightRules = {
+            investors: { green: v => v >= 2, red: v => v === 0 },
+            focus: { green: v => v >= 8, red: v => v <= 6 },
+            primaryFocusStart: { green: v => v <= 9, red: v => v >= 10 },
+            primaryFocusEnd: { green: v => v >= 14, red: v => v < 13 },
+            primaryFocusScore: { green: v => (v > 1 ? v / 100 : v) >= 0.5, red: v => (v > 1 ? v / 100 : v) < 0.4 },
+            secondaryFocus: { green: v => v >= 8, red: v => v <= 6 },
+            blocks: { green: v => v >= 2, red: v => v === 0 },
+            pressUps: { green: v => v >= 20, red: v => v === 0 },
+            squat: { green: v => v === 'yes' || v === 'Yes', red: v => v === 'no' || v === 'No' },
+            hipsBack: { green: v => v >= 7, red: v => v <= 5 },
+            stretch: { green: v => v === 'yes' || v === 'Yes', red: v => v === 'no' || v === 'No' },
+            sleep: { green: v => v >= 90, red: v => v <= 70 },
+            steps: { green: v => v >= 11000, red: v => v <= 8000 },
+            movement: { green: v => v >= 95, red: v => v <= 90 },
+            calsOut: { green: v => v >= 3000, red: v => v <= 2000 },
+            calsIn: { green: v => v <= 2000, red: v => v >= 2500 },
+            calories: { green: v => v <= -1000, red: v => v > 0 },
+            protein: { green: v => v >= 160, red: v => v <= 100 },
+            wakeUp: { green: v => parseTimeToMinutes(v) <= 390, red: v => parseTimeToMinutes(v) >= 420 },
+            goBed: { green: v => parseTimeToMinutes(v) <= 1380, red: v => parseTimeToMinutes(v) >= 1440 },
+            weight: { green: false, red: false },
+            belly: { green: false, red: false },
+            side: { green: false, red: false },
+            loveHandle: { green: false, red: false },
+            fat: { green: false, red: false },
+            thin: { green: false, red: false }
+        };
+
+        function parseTimeToMinutes(timeStr) {
+            if (typeof timeStr !== 'string') return 0;
+            const parts = timeStr.split(':').map(p => parseInt(p) || 0);
+            return parts[0] * 60 + parts[1];
+        }
+
+        function getCellColor(col, value, prevValue = null) {
+            if (value === null || value === undefined || value === '' || value === '—') return '';
+            const rule = highlightRules[col];
+            if (!rule) return '';
+
+            if (col === 'belly' || col === 'side' || col === 'loveHandle' || col === 'fat' || col === 'thin') {
+                if (prevValue !== null) {
+                    const curr = parseFloat(value) || 0;
+                    const prev = parseFloat(prevValue) || 0;
+                    if (curr < prev) return '#90EE90';
+                    if (curr > prev) return '#FFB6C6';
+                }
+                return '';
+            }
+
+            let numVal = value;
+            if (typeof value === 'string') {
+                numVal = parseFloat(value);
+                if (isNaN(numVal)) numVal = value;
+            }
+
+            if (col === 'primaryFocusStart' || col === 'primaryFocusEnd') {
+                numVal = parseInt(value) || 0;
+            }
+
+            if (typeof rule.green === 'function' && rule.green(numVal)) return '#90EE90';
+            if (typeof rule.red === 'function' && rule.red(numVal)) return '#FFB6C6';
+            return '';
+        }
+
         function applyMetricHighlight(elementId, metricName, value) {
             const element = document.getElementById(elementId);
             if (!element) return;
@@ -1877,70 +1942,6 @@
         let rawDataSortAscending = true;
         let rawDataVisibleColumns = {};
 
-        const highlightRules = {
-            investors: { green: v => v >= 2, red: v => v === 0 },
-            focus: { green: v => v >= 8, red: v => v <= 6 },
-            primaryFocusStart: { green: v => v <= 9, red: v => v >= 10 },
-            primaryFocusEnd: { green: v => v >= 14, red: v => v < 13 },
-            primaryFocusScore: { green: v => (v > 1 ? v / 100 : v) >= 0.5, red: v => (v > 1 ? v / 100 : v) < 0.4 },
-            secondaryFocus: { green: v => v >= 8, red: v => v <= 6 },
-            blocks: { green: v => v >= 2, red: v => v === 0 },
-            pressUps: { green: v => v >= 20, red: v => v === 0 },
-            squat: { green: v => v === 'yes' || v === 'Yes', red: v => v === 'no' || v === 'No' },
-            hipsBack: { green: v => v >= 7, red: v => v <= 5 },
-            stretch: { green: v => v === 'yes' || v === 'Yes', red: v => v === 'no' || v === 'No' },
-            sleep: { green: v => v >= 90, red: v => v <= 70 },
-            steps: { green: v => v >= 11000, red: v => v <= 8000 },
-            movement: { green: v => v >= 95, red: v => v <= 90 },
-            calsOut: { green: v => v >= 3000, red: v => v <= 2000 },
-            calsIn: { green: v => v <= 2000, red: v => v >= 2500 },
-            calories: { green: v => v <= -1000, red: v => v > 0 },
-            protein: { green: v => v >= 160, red: v => v <= 100 },
-            wakeUp: { green: v => parseTimeToMinutes(v) <= 390, red: v => parseTimeToMinutes(v) >= 420 },
-            goBed: { green: v => parseTimeToMinutes(v) <= 1380, red: v => parseTimeToMinutes(v) >= 1440 },
-            weight: { green: false, red: false },
-            belly: { green: false, red: false },
-            side: { green: false, red: false },
-            loveHandle: { green: false, red: false },
-            fat: { green: false, red: false },
-            thin: { green: false, red: false }
-        };
-
-        function parseTimeToMinutes(timeStr) {
-            if (typeof timeStr !== 'string') return 0;
-            const parts = timeStr.split(':').map(p => parseInt(p) || 0);
-            return parts[0] * 60 + parts[1];
-        }
-
-        function getCellColor(col, value, prevValue = null) {
-            if (value === null || value === undefined || value === '' || value === '—') return '';
-            const rule = highlightRules[col];
-            if (!rule) return '';
-
-            if (col === 'belly' || col === 'side' || col === 'loveHandle' || col === 'fat' || col === 'thin') {
-                if (prevValue !== null) {
-                    const curr = parseFloat(value) || 0;
-                    const prev = parseFloat(prevValue) || 0;
-                    if (curr < prev) return '#90EE90';
-                    if (curr > prev) return '#FFB6C6';
-                }
-                return '';
-            }
-
-            let numVal = value;
-            if (typeof value === 'string') {
-                numVal = parseFloat(value);
-                if (isNaN(numVal)) numVal = value;
-            }
-
-            if (col === 'primaryFocusStart' || col === 'primaryFocusEnd') {
-                numVal = parseInt(value) || 0;
-            }
-
-            if (typeof rule.green === 'function' && rule.green(numVal)) return '#90EE90';
-            if (typeof rule.red === 'function' && rule.red(numVal)) return '#FFB6C6';
-            return '';
-        }
 
         function updateRawDataTable() {
             const dataToUse = data;
