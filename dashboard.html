@@ -721,28 +721,6 @@
                 </div>
             </div>
 
-            <div class="comparison-grid">
-                <div class="comparison-box">
-                    <div class="comparison-label">Start Weight</div>
-                    <div class="comparison-value" id="startWeightComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Weight</div>
-                    <div class="comparison-value" id="avgWeightComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Current Caliper</div>
-                    <div class="comparison-value" id="avgCalsInComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Waist</div>
-                    <div class="comparison-value" id="avgCalsOutComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Calorie Deficit</div>
-                    <div class="comparison-value" id="avgCaloriesComp">—</div>
-                </div>
-            </div>
 
             <div class="dashboard-grid">
                 <div class="card">
@@ -1186,33 +1164,9 @@
                 const lastPeriodData = getLastPeriodData(startDate, endDate);
 
                 if (lastPeriodData.length > 0) {
-                    const lastWeights = lastPeriodData.filter(d => d.weight > 0).map(d => d.weight);
-                    const lastCalsIn = lastPeriodData.filter(d => d.calsIn > 0).map(d => d.calsIn);
-                    const lastCalsOut = lastPeriodData.filter(d => d.calsOut > 0).map(d => d.calsOut);
-                    const lastCalories = lastPeriodData.filter(d => d.calories !== null && d.calories !== undefined).map(d => d.calories);
-
-                    const lastStartWeight = lastWeights.length > 0 ? lastWeights[0].toFixed(1) : '—';
-                    const lastAvgWeight = lastWeights.length > 0 ? (lastWeights.reduce((a,b) => a+b) / lastWeights.length).toFixed(1) : '—';
-                    const lastCaliperRow = lastPeriodData.slice().reverse().find(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0));
-                    const lastCaliper = lastCaliperRow ? ((lastCaliperRow.belly || 0) + (lastCaliperRow.side || 0) + (lastCaliperRow.loveHandle || 0)).toFixed(1) : '—';
-                    const lastAvgCalsIn = lastCaliper;
-                    const lastWaistRow = lastPeriodData.slice().reverse().find(d => (d.fat > 0 || d.thin > 0));
-                    const lastWaist = lastWaistRow ? (((lastWaistRow.fat || 0) + (lastWaistRow.thin || 0)) / 2).toFixed(1) : '—';
-                    const lastAvgCalsOut = lastWaist;
-                    const lastAvgCalories = lastCalories.length > 0 ? Math.round(lastCalories.reduce((a,b) => a+b) / lastCalories.length).toLocaleString() : '—';
-
-                    document.getElementById('startWeightComp').textContent = lastStartWeight + ' kg';
-                    document.getElementById('avgWeightComp').textContent = lastAvgWeight + ' kg';
-                    document.getElementById('avgCalsInComp').textContent = lastAvgCalsIn;
-                    document.getElementById('avgCalsOutComp').textContent = lastAvgCalsOut;
-                    document.getElementById('avgCaloriesComp').textContent = lastAvgCalories;
+                    // Previous period data available
                 } else {
                     // No previous period data available
-                    document.getElementById('startWeightComp').textContent = '—';
-                    document.getElementById('avgWeightComp').textContent = '—';
-                    document.getElementById('avgCalsInComp').textContent = '—';
-                    document.getElementById('avgCalsOutComp').textContent = '—';
-                    document.getElementById('avgCaloriesComp').textContent = '—';
                 }
             }
         }
