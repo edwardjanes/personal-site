@@ -983,54 +983,30 @@
                 <div style="margin-bottom: 30px;">
                     <h3>Today's Entry</h3>
                     <form onsubmit="submitMetricsData(event, true)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div class="form-group">
-                            <label>Weight (kg)</label>
-                            <input type="number" id="todayWeight" step="0.1" placeholder="e.g., 82.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Primary Focus Score</label>
-                            <input type="number" id="todayPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Sleep (hours)</label>
-                            <input type="number" id="todaySleep" step="0.5" placeholder="e.g., 7.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Steps</label>
-                            <input type="number" id="todaySteps" placeholder="e.g., 10000">
-                        </div>
-                        <div class="form-group">
-                            <label>Cals In</label>
-                            <input type="number" id="todayCalsIn" placeholder="e.g., 2000">
-                        </div>
-                        <div class="form-group">
-                            <label>Cals Out</label>
-                            <input type="number" id="todayCalsOut" placeholder="e.g., 2700">
-                        </div>
-                        <div class="form-group">
-                            <label>Tasks Completed</label>
-                            <input type="number" id="todayBlocks" placeholder="e.g., 3">
-                        </div>
-                        <div class="form-group">
-                            <label>Investors Approached</label>
-                            <input type="number" id="todayInvestors" placeholder="e.g., 2">
-                        </div>
-                        <div class="form-group">
-                            <label>Focus (1-10)</label>
-                            <input type="number" id="todayFocus" min="1" max="10" placeholder="e.g., 8">
-                        </div>
-                        <div class="form-group">
-                            <label>Secondary Focus</label>
-                            <input type="number" id="todaySecondaryFocus" step="0.1" placeholder="e.g., 6.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Primary Focus Start</label>
-                            <input type="text" id="todayPrimaryFocusStart" placeholder="e.g., Email">
-                        </div>
-                        <div class="form-group">
-                            <label>Primary Focus End</label>
-                            <input type="text" id="todayPrimaryFocusEnd" placeholder="e.g., Coding">
-                        </div>
+                        <div class="form-group"><label>Weight (kg)</label><input type="number" id="todayWeight" step="0.1"></div>
+                        <div class="form-group"><label>Sleep (hours)</label><input type="number" id="todaySleep" step="0.5"></div>
+                        <div class="form-group"><label>Steps</label><input type="number" id="todaySteps"></div>
+                        <div class="form-group"><label>Movement (%)</label><input type="number" id="todayMovement" step="0.5"></div>
+                        <div class="form-group"><label>Cals In</label><input type="number" id="todayCalsIn"></div>
+                        <div class="form-group"><label>Cals Out</label><input type="number" id="todayCalsOut"></div>
+                        <div class="form-group"><label>Protein (g)</label><input type="number" id="todayProtein" step="0.1"></div>
+                        <div class="form-group"><label>Focus (1-10)</label><input type="number" id="todayFocus" min="1" max="10"></div>
+                        <div class="form-group"><label>Primary Focus Score</label><input type="number" id="todayPrimaryFocusScore" step="0.01"></div>
+                        <div class="form-group"><label>Secondary Focus</label><input type="number" id="todaySecondaryFocus" step="0.1"></div>
+                        <div class="form-group"><label>Primary Focus Start</label><input type="text" id="todayPrimaryFocusStart" placeholder="e.g., Email"></div>
+                        <div class="form-group"><label>Primary Focus End</label><input type="text" id="todayPrimaryFocusEnd" placeholder="e.g., Coding"></div>
+                        <div class="form-group"><label>Tasks Completed</label><input type="number" id="todayBlocks"></div>
+                        <div class="form-group"><label>Investors Approached</label><input type="number" id="todayInvestors"></div>
+                        <div class="form-group"><label>Press-Ups</label><input type="number" id="todayPressUps"></div>
+                        <div class="form-group"><label>Squats</label><select id="todaySquat"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+                        <div class="form-group"><label>Stretch</label><select id="todayStretch"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+                        <div class="form-group"><label>Hips & Back</label><input type="number" id="todayHipsBack" step="0.1"></div>
+                        <div class="form-group"><label>Belly</label><input type="number" id="todayBelly" step="0.1"></div>
+                        <div class="form-group"><label>Side</label><input type="number" id="todaySide" step="0.1"></div>
+                        <div class="form-group"><label>Love Handle</label><input type="number" id="todayLoveHandle" step="0.1"></div>
+                        <div class="form-group"><label>Fat</label><input type="number" id="todayFat" step="0.1"></div>
+                        <div class="form-group"><label>Thin</label><input type="number" id="todayThin" step="0.1"></div>
+                        <div class="form-group"><label>Average</label><input type="number" id="todayAverage" step="0.1"></div>
                         <div class="form-actions" style="grid-column: 1 / -1;">
                             <button type="submit" class="btn-submit">Save Today's Data</button>
                             <button type="button" class="btn-clear" onclick="clearTodayForm()">Clear</button>
@@ -1042,58 +1018,31 @@
                 <div>
                     <h3>Historical Entry</h3>
                     <form onsubmit="submitMetricsData(event, false)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div class="form-group">
-                            <label>Date (D/M/YY)</label>
-                            <input type="text" id="historyDate" placeholder="e.g., 28/5/26" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Weight (kg)</label>
-                            <input type="number" id="historyWeight" step="0.1" placeholder="e.g., 82.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Primary Focus Score</label>
-                            <input type="number" id="historyPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Sleep (hours)</label>
-                            <input type="number" id="historySleep" step="0.5" placeholder="e.g., 7.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Steps</label>
-                            <input type="number" id="historySteps" placeholder="e.g., 10000">
-                        </div>
-                        <div class="form-group">
-                            <label>Cals In</label>
-                            <input type="number" id="historyCalsIn" placeholder="e.g., 2000">
-                        </div>
-                        <div class="form-group">
-                            <label>Cals Out</label>
-                            <input type="number" id="historyCalsOut" placeholder="e.g., 2700">
-                        </div>
-                        <div class="form-group">
-                            <label>Tasks Completed</label>
-                            <input type="number" id="historyBlocks" placeholder="e.g., 3">
-                        </div>
-                        <div class="form-group">
-                            <label>Investors Approached</label>
-                            <input type="number" id="historyInvestors" placeholder="e.g., 2">
-                        </div>
-                        <div class="form-group">
-                            <label>Focus (1-10)</label>
-                            <input type="number" id="historyFocus" min="1" max="10" placeholder="e.g., 8">
-                        </div>
-                        <div class="form-group">
-                            <label>Secondary Focus</label>
-                            <input type="number" id="historySecondaryFocus" step="0.1" placeholder="e.g., 6.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Primary Focus Start</label>
-                            <input type="text" id="historyPrimaryFocusStart" placeholder="e.g., Email">
-                        </div>
-                        <div class="form-group">
-                            <label>Primary Focus End</label>
-                            <input type="text" id="historyPrimaryFocusEnd" placeholder="e.g., Coding">
-                        </div>
+                        <div class="form-group"><label>Date</label><input type="date" id="historyDate" required></div>
+                        <div class="form-group"><label>Weight (kg)</label><input type="number" id="historyWeight" step="0.1"></div>
+                        <div class="form-group"><label>Sleep (hours)</label><input type="number" id="historySleep" step="0.5"></div>
+                        <div class="form-group"><label>Steps</label><input type="number" id="historySteps"></div>
+                        <div class="form-group"><label>Movement (%)</label><input type="number" id="historyMovement" step="0.5"></div>
+                        <div class="form-group"><label>Cals In</label><input type="number" id="historyCalsIn"></div>
+                        <div class="form-group"><label>Cals Out</label><input type="number" id="historyCalsOut"></div>
+                        <div class="form-group"><label>Protein (g)</label><input type="number" id="historyProtein" step="0.1"></div>
+                        <div class="form-group"><label>Focus (1-10)</label><input type="number" id="historyFocus" min="1" max="10"></div>
+                        <div class="form-group"><label>Primary Focus Score</label><input type="number" id="historyPrimaryFocusScore" step="0.01"></div>
+                        <div class="form-group"><label>Secondary Focus</label><input type="number" id="historySecondaryFocus" step="0.1"></div>
+                        <div class="form-group"><label>Primary Focus Start</label><input type="text" id="historyPrimaryFocusStart" placeholder="e.g., Email"></div>
+                        <div class="form-group"><label>Primary Focus End</label><input type="text" id="historyPrimaryFocusEnd" placeholder="e.g., Coding"></div>
+                        <div class="form-group"><label>Tasks Completed</label><input type="number" id="historyBlocks"></div>
+                        <div class="form-group"><label>Investors Approached</label><input type="number" id="historyInvestors"></div>
+                        <div class="form-group"><label>Press-Ups</label><input type="number" id="historyPressUps"></div>
+                        <div class="form-group"><label>Squats</label><select id="historySquat"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+                        <div class="form-group"><label>Stretch</label><select id="historyStretch"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+                        <div class="form-group"><label>Hips & Back</label><input type="number" id="historyHipsBack" step="0.1"></div>
+                        <div class="form-group"><label>Belly</label><input type="number" id="historyBelly" step="0.1"></div>
+                        <div class="form-group"><label>Side</label><input type="number" id="historySide" step="0.1"></div>
+                        <div class="form-group"><label>Love Handle</label><input type="number" id="historyLoveHandle" step="0.1"></div>
+                        <div class="form-group"><label>Fat</label><input type="number" id="historyFat" step="0.1"></div>
+                        <div class="form-group"><label>Thin</label><input type="number" id="historyThin" step="0.1"></div>
+                        <div class="form-group"><label>Average</label><input type="number" id="historyAverage" step="0.1"></div>
                         <div class="form-actions" style="grid-column: 1 / -1;">
                             <button type="submit" class="btn-submit">Save Entry</button>
                             <button type="button" class="btn-clear" onclick="clearHistoryForm()">Clear</button>
@@ -2184,38 +2133,71 @@
             return `${d}/${m}/${y}`;
         }
 
+        function formatDateFromPicker(dateString) {
+            if (!dateString) return '';
+            const [year, month, day] = dateString.split('-');
+            const shortYear = year.slice(-2);
+            return `${day}/${month}/${shortYear}`;
+        }
+
         function collectFormData(isToday) {
             if (isToday) {
                 return {
                     date: getTodayDate(),
                     weight: document.getElementById('todayWeight').value || undefined,
-                    primaryFocusScore: document.getElementById('todayPrimaryFocusScore').value || undefined,
                     sleep: document.getElementById('todaySleep').value || undefined,
                     steps: document.getElementById('todaySteps').value || undefined,
+                    movement: document.getElementById('todayMovement').value || undefined,
                     calsIn: document.getElementById('todayCalsIn').value || undefined,
                     calsOut: document.getElementById('todayCalsOut').value || undefined,
-                    blocks: document.getElementById('todayBlocks').value || undefined,
-                    investors: document.getElementById('todayInvestors').value || undefined,
+                    protein: document.getElementById('todayProtein').value || undefined,
                     focus: document.getElementById('todayFocus').value || undefined,
+                    primaryFocusScore: document.getElementById('todayPrimaryFocusScore').value || undefined,
                     secondaryFocus: document.getElementById('todaySecondaryFocus').value || undefined,
                     primaryFocusStart: document.getElementById('todayPrimaryFocusStart').value || undefined,
                     primaryFocusEnd: document.getElementById('todayPrimaryFocusEnd').value || undefined,
+                    blocks: document.getElementById('todayBlocks').value || undefined,
+                    investors: document.getElementById('todayInvestors').value || undefined,
+                    pressUps: document.getElementById('todayPressUps').value || undefined,
+                    squat: document.getElementById('todaySquat').value || undefined,
+                    stretch: document.getElementById('todayStretch').value || undefined,
+                    hipsBack: document.getElementById('todayHipsBack').value || undefined,
+                    belly: document.getElementById('todayBelly').value || undefined,
+                    side: document.getElementById('todaySide').value || undefined,
+                    loveHandle: document.getElementById('todayLoveHandle').value || undefined,
+                    fat: document.getElementById('todayFat').value || undefined,
+                    thin: document.getElementById('todayThin').value || undefined,
+                    average: document.getElementById('todayAverage').value || undefined,
                 };
             } else {
+                const historyDatePicker = document.getElementById('historyDate').value;
+                const formattedDate = historyDatePicker ? formatDateFromPicker(historyDatePicker) : '';
                 return {
-                    date: document.getElementById('historyDate').value,
+                    date: formattedDate,
                     weight: document.getElementById('historyWeight').value || undefined,
-                    primaryFocusScore: document.getElementById('historyPrimaryFocusScore').value || undefined,
                     sleep: document.getElementById('historySleep').value || undefined,
                     steps: document.getElementById('historySteps').value || undefined,
+                    movement: document.getElementById('historyMovement').value || undefined,
                     calsIn: document.getElementById('historyCalsIn').value || undefined,
                     calsOut: document.getElementById('historyCalsOut').value || undefined,
-                    blocks: document.getElementById('historyBlocks').value || undefined,
-                    investors: document.getElementById('historyInvestors').value || undefined,
+                    protein: document.getElementById('historyProtein').value || undefined,
                     focus: document.getElementById('historyFocus').value || undefined,
+                    primaryFocusScore: document.getElementById('historyPrimaryFocusScore').value || undefined,
                     secondaryFocus: document.getElementById('historySecondaryFocus').value || undefined,
                     primaryFocusStart: document.getElementById('historyPrimaryFocusStart').value || undefined,
                     primaryFocusEnd: document.getElementById('historyPrimaryFocusEnd').value || undefined,
+                    blocks: document.getElementById('historyBlocks').value || undefined,
+                    investors: document.getElementById('historyInvestors').value || undefined,
+                    pressUps: document.getElementById('historyPressUps').value || undefined,
+                    squat: document.getElementById('historySquat').value || undefined,
+                    stretch: document.getElementById('historyStretch').value || undefined,
+                    hipsBack: document.getElementById('historyHipsBack').value || undefined,
+                    belly: document.getElementById('historyBelly').value || undefined,
+                    side: document.getElementById('historySide').value || undefined,
+                    loveHandle: document.getElementById('historyLoveHandle').value || undefined,
+                    fat: document.getElementById('historyFat').value || undefined,
+                    thin: document.getElementById('historyThin').value || undefined,
+                    average: document.getElementById('historyAverage').value || undefined,
                 };
             }
         }
@@ -2226,11 +2208,11 @@
             const formData = collectFormData(isToday);
             const messageEl = isToday ? document.getElementById('todayMessage') : document.getElementById('historyMessage');
 
-            // Clean up undefined values and convert strings to numbers where appropriate
+            const numericFields = ['weight', 'sleep', 'steps', 'movement', 'calsIn', 'calsOut', 'protein', 'focus', 'primaryFocusScore', 'secondaryFocus', 'blocks', 'investors', 'pressUps', 'hipsBack', 'belly', 'side', 'loveHandle', 'fat', 'thin', 'average'];
             const cleanData = {};
             for (const [key, value] of Object.entries(formData)) {
                 if (value !== undefined && value !== '') {
-                    if (['weight', 'primaryFocusScore', 'sleep', 'steps', 'calsIn', 'calsOut', 'blocks', 'investors', 'focus', 'secondaryFocus'].includes(key)) {
+                    if (numericFields.includes(key)) {
                         cleanData[key] = parseFloat(value);
                     } else {
                         cleanData[key] = value;
@@ -2296,36 +2278,26 @@
         }
 
         function clearTodayForm() {
-            document.getElementById('todayWeight').value = '';
-            document.getElementById('todayPrimaryFocusScore').value = '';
-            document.getElementById('todaySleep').value = '';
-            document.getElementById('todaySteps').value = '';
-            document.getElementById('todayCalsIn').value = '';
-            document.getElementById('todayCalsOut').value = '';
-            document.getElementById('todayBlocks').value = '';
-            document.getElementById('todayInvestors').value = '';
-            document.getElementById('todayFocus').value = '';
-            document.getElementById('todaySecondaryFocus').value = '';
-            document.getElementById('todayPrimaryFocusStart').value = '';
-            document.getElementById('todayPrimaryFocusEnd').value = '';
+            const fields = ['Weight', 'Sleep', 'Steps', 'Movement', 'CalsIn', 'CalsOut', 'Protein', 'Focus', 'PrimaryFocusScore', 'SecondaryFocus', 'PrimaryFocusStart', 'PrimaryFocusEnd', 'Blocks', 'Investors', 'PressUps', 'HipsBack', 'Belly', 'Side', 'LoveHandle', 'Fat', 'Thin', 'Average'];
+            fields.forEach(field => {
+                const el = document.getElementById('today' + field);
+                if (el) el.value = '';
+            });
+            document.getElementById('todaySquat').value = '';
+            document.getElementById('todayStretch').value = '';
             document.getElementById('todayMessage').textContent = '';
             document.getElementById('todayMessage').classList.remove('error', 'success');
         }
 
         function clearHistoryForm() {
             document.getElementById('historyDate').value = '';
-            document.getElementById('historyWeight').value = '';
-            document.getElementById('historyPrimaryFocusScore').value = '';
-            document.getElementById('historySleep').value = '';
-            document.getElementById('historySteps').value = '';
-            document.getElementById('historyCalsIn').value = '';
-            document.getElementById('historyCalsOut').value = '';
-            document.getElementById('historyBlocks').value = '';
-            document.getElementById('historyInvestors').value = '';
-            document.getElementById('historyFocus').value = '';
-            document.getElementById('historySecondaryFocus').value = '';
-            document.getElementById('historyPrimaryFocusStart').value = '';
-            document.getElementById('historyPrimaryFocusEnd').value = '';
+            const fields = ['Weight', 'Sleep', 'Steps', 'Movement', 'CalsIn', 'CalsOut', 'Protein', 'Focus', 'PrimaryFocusScore', 'SecondaryFocus', 'PrimaryFocusStart', 'PrimaryFocusEnd', 'Blocks', 'Investors', 'PressUps', 'HipsBack', 'Belly', 'Side', 'LoveHandle', 'Fat', 'Thin', 'Average'];
+            fields.forEach(field => {
+                const el = document.getElementById('history' + field);
+                if (el) el.value = '';
+            });
+            document.getElementById('historySquat').value = '';
+            document.getElementById('historyStretch').value = '';
             document.getElementById('historyMessage').textContent = '';
             document.getElementById('historyMessage').classList.remove('error', 'success');
         }
