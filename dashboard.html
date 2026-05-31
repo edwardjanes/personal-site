@@ -2137,7 +2137,9 @@
             if (!dateString) return '';
             const [year, month, day] = dateString.split('-');
             const shortYear = year.slice(-2);
-            return `${day}/${month}/${shortYear}`;
+            const monthNum = parseInt(month);
+            const dayNum = parseInt(day);
+            return `${dayNum}/${monthNum}/${shortYear}`;
         }
 
         function collectFormData(isToday) {
