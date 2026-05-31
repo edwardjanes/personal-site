@@ -1254,6 +1254,16 @@
                             borderColor: '#eab308',
                             backgroundColor: 'rgba(234, 179, 8, 0.1)',
                             tension: 0.4
+                        },
+                        {
+                            label: 'Total',
+                            data: chartData.map(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0) ? (d.belly + d.side + d.loveHandle) : null),
+                            borderColor: '#000000',
+                            borderWidth: 3,
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#000000'
                         }
                     ]
                 },
