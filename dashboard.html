@@ -687,6 +687,7 @@
             <button class="tab-btn active" onclick="switchTab('health')">Health</button>
             <button class="tab-btn" onclick="switchTab('productivity')">Productivity</button>
             <button class="tab-btn" onclick="switchTab('nutrition')">Nutrition</button>
+            <button class="tab-btn" onclick="switchTab('activity')">Activity</button>
             <button class="tab-btn" onclick="switchTab('entry')">Add Data</button>
         </div>
 
@@ -902,6 +903,73 @@
                             </tr>
                         </thead>
                         <tbody id="nutritionDailyDataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="activity-tab" style="display: none;">
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Average Steps</div>
+                    <div class="metric-value" id="activityAvgSteps">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Movement</div>
+                    <div class="metric-value" id="activityAvgMovement">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Total Stretch</div>
+                    <div class="metric-value" id="activityTotalStretch">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Total Squats</div>
+                    <div class="metric-value" id="activityTotalSquats">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Press Ups</div>
+                    <div class="metric-value" id="activityAvgPressUps">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Hips & Back</div>
+                    <div class="metric-value" id="activityAvgHipsBack">—</div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
+                    <div>
+                        <h2>Hips & Back Score</h2>
+                        <div class="chart-container">
+                            <canvas id="hipsBackChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Steps by Day</h2>
+                        <div class="chart-container">
+                            <canvas id="stepsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <h2>Daily Data</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #ddd; background: #f9f9f9;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Steps</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Movement</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Press Ups</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Squats</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Stretch</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Hips & Back</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityDailyDataTable">
                         </tbody>
                     </table>
                 </div>
@@ -1130,8 +1198,13 @@
                     secondaryFocus: row.secondaryFocus || 0,
                     primaryFocusStart: row.primaryFocusStart || '',
                     primaryFocusEnd: row.primaryFocusEnd || '',
+                    movement: row.movement || 0,
+                    pressUps: row.pressUps || 0,
+                    squat: row.squat || '',
+                    stretch: row.stretch || '',
+                    hipsBack: row.hipsBack || 0,
                 }))
-                .filter(row => row.focus > 0 || row.weight > 0 || row.steps > 0 || row.sleep > 0 || row.primaryFocusScore > 0 || row.blocks > 0 || row.belly > 0 || row.side > 0 || row.loveHandle > 0 || row.fat > 0 || row.thin > 0 || row.average > 0 || row.calsIn > 0 || row.calsOut > 0 || row.calories > 0 || row.protein > 0 || row.proteinPerKg > 0);
+                .filter(row => row.focus > 0 || row.weight > 0 || row.steps > 0 || row.sleep > 0 || row.primaryFocusScore > 0 || row.blocks > 0 || row.belly > 0 || row.side > 0 || row.loveHandle > 0 || row.fat > 0 || row.thin > 0 || row.average > 0 || row.calsIn > 0 || row.calsOut > 0 || row.calories > 0 || row.protein > 0 || row.proteinPerKg > 0 || row.movement > 0 || row.pressUps > 0 || row.squat || row.stretch || row.hipsBack > 0);
         }
 
         // Fetch data from Google Apps Script
@@ -1175,6 +1248,7 @@
                 updateDailyData();
                 updateProductivityDailyData();
                 updateNutritionDailyData();
+                updateActivityDailyData();
             }
         }
 
@@ -1249,6 +1323,28 @@
             document.getElementById('nutritionAvgCalsDefecit').textContent = typeof avgNutritionDefecit === 'number' ? avgNutritionDefecit.toLocaleString() : avgNutritionDefecit;
             document.getElementById('nutritionAvgProtein').textContent = avgNutritionProtein;
             document.getElementById('nutritionAvgProteinPerKg').textContent = avgNutritionProteinPerKg;
+
+            // Activity tab metrics
+            const stepsList = dataToUse.filter(d => d.steps > 0).map(d => d.steps);
+            const movementList = dataToUse.filter(d => d.movement > 0).map(d => d.movement);
+            const stretchList = dataToUse.filter(d => d.stretch === 'yes').length;
+            const squatList = dataToUse.filter(d => d.squat === 'yes').length;
+            const pressUpsList = dataToUse.filter(d => d.pressUps > 0).map(d => d.pressUps);
+            const hipsBackList = dataToUse.filter(d => d.hipsBack > 0).map(d => d.hipsBack);
+
+            const avgActivitySteps = stepsList.length > 0 ? Math.round(stepsList.reduce((a,b) => a+b) / stepsList.length).toLocaleString() : '—';
+            const avgActivityMovement = movementList.length > 0 ? (movementList.reduce((a,b) => a+b) / movementList.length).toFixed(1) : '—';
+            const totalActivityStretch = stretchList;
+            const totalActivitySquats = squatList;
+            const avgActivityPressUps = pressUpsList.length > 0 ? (pressUpsList.reduce((a,b) => a+b) / pressUpsList.length).toFixed(1) : '—';
+            const avgActivityHipsBack = hipsBackList.length > 0 ? (hipsBackList.reduce((a,b) => a+b) / hipsBackList.length).toFixed(1) : '—';
+
+            document.getElementById('activityAvgSteps').textContent = avgActivitySteps;
+            document.getElementById('activityAvgMovement').textContent = avgActivityMovement;
+            document.getElementById('activityTotalStretch').textContent = totalActivityStretch;
+            document.getElementById('activityTotalSquats').textContent = totalActivitySquats;
+            document.getElementById('activityAvgPressUps').textContent = avgActivityPressUps;
+            document.getElementById('activityAvgHipsBack').textContent = avgActivityHipsBack;
 
             // Display second row health metrics from previous period
             const startInput = document.getElementById('startDate').value;
@@ -1533,6 +1629,47 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
+
+            chartInstances.hipsBack = new Chart(document.getElementById('hipsBackChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Hips & Back',
+                        data: chartData.map(d => d.hipsBack > 0 ? d.hipsBack : null),
+                        borderColor: '#ea580c',
+                        backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#ea580c',
+                        spanGaps: true
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            chartInstances.steps = new Chart(document.getElementById('stepsChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Steps',
+                        data: chartData.map(d => d.steps > 0 ? d.steps : null),
+                        backgroundColor: '#16a34a',
+                        borderColor: '#15803d',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() } } }
+                }
+            });
         }
 
         function updateDailyData() {
@@ -1689,6 +1826,46 @@
                     <td style="padding: 10px 12px; text-align: center;">${deficit !== 0 ? deficit.toLocaleString() : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${protein > 0 ? protein.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center;">${proteinPerKg > 0 ? proteinPerKg.toFixed(2) : '—'}</td>
+                </tr>`;
+            });
+            tableBody.innerHTML = html;
+        }
+
+        function updateActivityDailyData() {
+            const tableBody = document.getElementById('activityDailyDataTable');
+            if (!tableBody) {
+                console.log('Activity daily data table not found');
+                return;
+            }
+
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            console.log('updateActivityDailyData - dataToUse length:', dataToUse.length);
+
+            if (dataToUse.length === 0) {
+                tableBody.innerHTML = '';
+                console.log('No data to display');
+                return;
+            }
+
+            let html = '';
+            dataToUse.forEach(row => {
+                if (!row.date) return;
+
+                const steps = row.steps || 0;
+                const movement = row.movement || 0;
+                const pressUps = row.pressUps || 0;
+                const squat = row.squat || '';
+                const stretch = row.stretch || '';
+                const hipsBack = row.hipsBack || 0;
+
+                html += `<tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${steps > 0 ? steps.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${movement > 0 ? movement.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${pressUps > 0 ? pressUps.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${squat ? squat.charAt(0).toUpperCase() + squat.slice(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${stretch ? stretch.charAt(0).toUpperCase() + stretch.slice(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${hipsBack > 0 ? hipsBack.toFixed(1) : '—'}</td>
                 </tr>`;
             });
             tableBody.innerHTML = html;
@@ -1878,6 +2055,7 @@
             updateDailyData();
             updateProductivityDailyData();
             updateNutritionDailyData();
+            updateActivityDailyData();
         }
 
         function updateComparisonChart() {
@@ -1964,6 +2142,7 @@
             const healthTab = document.getElementById('health-tab');
             const productivityTab = document.getElementById('productivity-tab');
             const nutritionTab = document.getElementById('nutrition-tab');
+            const activityTab = document.getElementById('activity-tab');
             const entryTab = document.getElementById('entry-tab');
             const buttons = document.querySelectorAll('.tab-btn');
 
@@ -1971,6 +2150,7 @@
             healthTab.style.display = 'none';
             productivityTab.style.display = 'none';
             nutritionTab.style.display = 'none';
+            activityTab.style.display = 'none';
             entryTab.style.display = 'none';
 
             // Remove active from all buttons
@@ -1986,9 +2166,12 @@
             } else if (tabName === 'nutrition') {
                 nutritionTab.style.display = 'block';
                 buttons[2].classList.add('active');
+            } else if (tabName === 'activity') {
+                activityTab.style.display = 'block';
+                buttons[3].classList.add('active');
             } else if (tabName === 'entry') {
                 entryTab.style.display = 'block';
-                buttons[3].classList.add('active');
+                buttons[4].classList.add('active');
             }
         }
 
