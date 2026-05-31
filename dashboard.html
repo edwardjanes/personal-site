@@ -1139,7 +1139,7 @@
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
 
             // Calculate average focus score from primary focus score values (out of 100%)
-            const avgFocusScore = primaryFocusScoreList.length > 0 ? ((primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length) * 10).toFixed(1) : '—';
+            const avgFocusScore = primaryFocusScoreList.length > 0 ? ((primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length) * 100).toFixed(1) : '—';
             const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
 
             // Calculate focus score delta (up is good for productivity)
