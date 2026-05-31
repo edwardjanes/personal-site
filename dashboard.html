@@ -1850,6 +1850,7 @@
 
         function updateRawDataTable() {
             const dataToUse = data;
+            console.log('updateRawDataTable called, data length:', dataToUse.length);
             if (dataToUse.length === 0) {
                 document.getElementById('rawDataBody').innerHTML = '';
                 return;
@@ -1860,6 +1861,7 @@
                 Object.keys(row).forEach(key => allColumns.add(key));
             });
             const columns = Array.from(allColumns).sort();
+            console.log('Extracted columns:', columns.length, columns);
 
             if (Object.keys(rawDataVisibleColumns).length === 0) {
                 columns.forEach(col => {
@@ -1896,7 +1898,9 @@
                 });
                 bodyHtml += '</tr>';
             });
+            console.log('Built', sorted.length, 'rows with', visibleCols.length, 'visible columns');
             document.getElementById('rawDataBody').innerHTML = bodyHtml;
+            console.log('Raw data table populated');
         }
 
         function sortRawDataByColumn(col) {
