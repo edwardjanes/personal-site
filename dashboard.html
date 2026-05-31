@@ -689,6 +689,7 @@
             <button class="tab-btn" onclick="switchTab('nutrition')">Nutrition</button>
             <button class="tab-btn" onclick="switchTab('activity')">Activity</button>
             <button class="tab-btn" onclick="switchTab('entry')">Add Data</button>
+            <button class="tab-btn" onclick="switchTab('rawdata')">Raw Data</button>
         </div>
 
         <div id="health-tab">
@@ -1049,6 +1050,29 @@
                         </div>
                     </form>
                     <div class="form-message" id="historyMessage"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="rawdata-tab" style="display: none;">
+            <div class="card">
+                <div style="margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <input type="text" id="rawDataFilter" placeholder="Search all data..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                        </div>
+                        <button onclick="toggleColumnVisibility()" style="padding: 10px 20px; background: #0A0A0A; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Toggle Columns</button>
+                    </div>
+                    <div id="columnVisibility" style="display: none; margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px; max-height: 300px; overflow-y: auto;">
+                    </div>
+                </div>
+                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                    <table id="rawDataTable" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead id="rawDataHeader" style="position: sticky; top: 0; background: #f9f9f9;">
+                        </thead>
+                        <tbody id="rawDataBody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1820,6 +1844,98 @@
             tableBody.innerHTML = html;
         }
 
+        let rawDataSortColumn = null;
+        let rawDataSortAscending = true;
+        let rawDataVisibleColumns = {};
+
+        function updateRawDataTable() {
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            if (dataToUse.length === 0) {
+                document.getElementById('rawDataBody').innerHTML = '';
+                return;
+            }
+
+            const allColumns = new Set();
+            dataToUse.forEach(row => {
+                Object.keys(row).forEach(key => allColumns.add(key));
+            });
+            const columns = Array.from(allColumns).sort();
+
+            if (Object.keys(rawDataVisibleColumns).length === 0) {
+                columns.forEach(col => {
+                    rawDataVisibleColumns[col] = true;
+                });
+            }
+
+            const visibleCols = columns.filter(col => rawDataVisibleColumns[col]);
+
+            let headerHtml = '<tr style="border-bottom: 2px solid #ddd;">';
+            visibleCols.forEach(col => {
+                headerHtml += `<th style="padding: 12px; text-align: left; font-weight: 600; cursor: pointer; user-select: none; background: #f9f9f9;" onclick="sortRawDataByColumn('${col}')">${col} ${rawDataSortColumn === col ? (rawDataSortAscending ? '▲' : '▼') : ''}</th>`;
+            });
+            headerHtml += '</tr>';
+            document.getElementById('rawDataHeader').innerHTML = headerHtml;
+
+            let sorted = [...dataToUse];
+            if (rawDataSortColumn && visibleCols.includes(rawDataSortColumn)) {
+                sorted.sort((a, b) => {
+                    const aVal = a[rawDataSortColumn] ?? '';
+                    const bVal = b[rawDataSortColumn] ?? '';
+                    const comp = isNaN(aVal) ? String(aVal).localeCompare(String(bVal)) : aVal - bVal;
+                    return rawDataSortAscending ? comp : -comp;
+                });
+            }
+
+            let bodyHtml = '';
+            sorted.forEach(row => {
+                bodyHtml += '<tr style="border-bottom: 1px solid #eee;">';
+                visibleCols.forEach(col => {
+                    const value = row[col];
+                    const display = value === null || value === undefined || value === '' ? '—' : (typeof value === 'number' ? value.toFixed(2) : String(value));
+                    bodyHtml += `<td style="padding: 10px 12px; text-align: left; font-size: 13px;">${display}</td>`;
+                });
+                bodyHtml += '</tr>';
+            });
+            document.getElementById('rawDataBody').innerHTML = bodyHtml;
+        }
+
+        function sortRawDataByColumn(col) {
+            if (rawDataSortColumn === col) {
+                rawDataSortAscending = !rawDataSortAscending;
+            } else {
+                rawDataSortColumn = col;
+                rawDataSortAscending = true;
+            }
+            updateRawDataTable();
+        }
+
+        function toggleColumnVisibility() {
+            const visPanel = document.getElementById('columnVisibility');
+            if (visPanel.style.display === 'none') {
+                visPanel.style.display = 'block';
+                const dataToUse = filteredData.length > 0 ? filteredData : data;
+                const allColumns = new Set();
+                dataToUse.forEach(row => {
+                    Object.keys(row).forEach(key => allColumns.add(key));
+                });
+                const columns = Array.from(allColumns).sort();
+
+                let html = '';
+                columns.forEach(col => {
+                    const checked = rawDataVisibleColumns[col] !== false;
+                    html += `<label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleColumn('${col}')" style="margin-right: 8px;"> ${col}</label>`;
+                });
+                visPanel.innerHTML = html;
+            } else {
+                visPanel.style.display = 'none';
+            }
+        }
+
+        function toggleColumn(col) {
+            rawDataVisibleColumns[col] = !rawDataVisibleColumns[col];
+            updateRawDataTable();
+        }
+
         let filteredData = [];
         let comparisonChartInstance = null;
         let chartInstances = {};  // Track all chart instances
@@ -2093,6 +2209,7 @@
             const nutritionTab = document.getElementById('nutrition-tab');
             const activityTab = document.getElementById('activity-tab');
             const entryTab = document.getElementById('entry-tab');
+            const rawDataTab = document.getElementById('rawdata-tab');
             const buttons = document.querySelectorAll('.tab-btn');
 
             // Hide all tabs
@@ -2101,6 +2218,7 @@
             nutritionTab.style.display = 'none';
             activityTab.style.display = 'none';
             entryTab.style.display = 'none';
+            rawDataTab.style.display = 'none';
 
             // Remove active from all buttons
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -2121,6 +2239,10 @@
             } else if (tabName === 'entry') {
                 entryTab.style.display = 'block';
                 buttons[4].classList.add('active');
+            } else if (tabName === 'rawdata') {
+                rawDataTab.style.display = 'block';
+                buttons[5].classList.add('active');
+                updateRawDataTable();
             }
         }
 
@@ -2300,6 +2422,16 @@
             document.getElementById('historyMessage').textContent = '';
             document.getElementById('historyMessage').classList.remove('error', 'success');
         }
+
+        // Raw data search filter
+        document.getElementById('rawDataFilter').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#rawDataBody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
 
         // Initialize - load data from Google Sheet
         loadData();
