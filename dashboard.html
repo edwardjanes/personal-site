@@ -1861,7 +1861,7 @@
                 Object.keys(row).forEach(key => allColumns.add(key));
             });
             let columns = Array.from(allColumns).sort();
-            columns = columns.filter(c => c !== 'date');
+            columns = columns.filter(c => c !== 'date' && c !== 'blocks');
             columns.unshift('date');
             console.log('Extracted columns:', columns.length, columns);
 
