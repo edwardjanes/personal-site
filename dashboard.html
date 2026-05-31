@@ -1140,12 +1140,19 @@
             const focusScoresList = dataToUse
               .filter(d => d.primaryFocusStart && d.primaryFocusEnd && d.primaryFocusScore > 0)
               .map(d => {
-                const [startHour, startMin] = d.primaryFocusStart.split(':').map(Number);
-                const [endHour, endMin] = d.primaryFocusEnd.split(':').map(Number);
-                const hours = (endHour + endMin / 60) - (startHour + startMin / 60);
-                return (hours * d.primaryFocusScore) / 80;
+                try {
+                  const [startHour, startMin] = d.primaryFocusStart.split(':').map(Number);
+                  const [endHour, endMin] = d.primaryFocusEnd.split(':').map(Number);
+                  const hours = (endHour + endMin / 60) - (startHour + startMin / 60);
+                  return (hours * d.primaryFocusScore) / 80;
+                } catch (e) {
+                  console.log('Error calculating focus score for row:', d, e);
+                  return 0;
+                }
               });
-            const avgFocusScore = focusScoresList.length > 0 ? (focusScoresList.reduce((a,b) => a+b) / focusScoresList.length * 100).toFixed(1) : '—';
+            console.log('Focus scores list:', focusScoresList);
+            const avgFocusScore = focusScoresList.length > 0 && focusScoresList.some(s => s > 0) ? (focusScoresList.reduce((a,b) => a+b) / focusScoresList.length * 100).toFixed(1) : '—';
+            console.log('Avg focus score:', avgFocusScore);
             const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
 
             // Health tab metrics
