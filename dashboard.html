@@ -127,7 +127,7 @@
         .tab-nav {
             display: flex;
             gap: 0;
-            margin-bottom: 30px;
+            margin-bottom: 0;
             background: white;
             border-radius: 12px 12px 0 0;
             padding: 0 28px;
@@ -194,17 +194,14 @@
 
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
             gap: 12px;
             margin-bottom: 30px;
             padding: 0 28px;
             background: white;
-            margin-left: -28px;
-            margin-right: -28px;
-            padding-top: 24px;
-            padding-bottom: 24px;
+            padding-top: 20px;
+            padding-bottom: 20px;
             border-radius: 0 0 12px 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(0, 0, 0, 0.05);
             border-top: none;
         }
@@ -214,8 +211,8 @@
             margin-right: 0;
             padding-left: 28px;
             padding-right: 28px;
-            border-radius: 12px 12px 0 0;
-            border-bottom: none;
+            border-radius: 0 0 12px 12px;
+            border-top: none;
         }
 
         .metric-box {
@@ -689,6 +686,8 @@
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('health')">Health</button>
             <button class="tab-btn" onclick="switchTab('productivity')">Productivity</button>
+            <button class="tab-btn" onclick="switchTab('nutrition')">Nutrition</button>
+            <button class="tab-btn" onclick="switchTab('activity')">Activity</button>
             <button class="tab-btn" onclick="switchTab('entry')">Add Data</button>
         </div>
 
@@ -708,11 +707,11 @@
                     <div class="metric-value" id="avgWeight">—</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label">Avg Calories In</div>
+                    <div class="metric-label">Current Caliper</div>
                     <div class="metric-value" id="avgCalsIn">—</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label">Avg Calories Out</div>
+                    <div class="metric-label">Waist</div>
                     <div class="metric-value" id="avgCalsOut">—</div>
                 </div>
                 <div class="metric-box">
@@ -721,28 +720,6 @@
                 </div>
             </div>
 
-            <div class="comparison-grid">
-                <div class="comparison-box">
-                    <div class="comparison-label">Start Weight</div>
-                    <div class="comparison-value" id="startWeightComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Weight</div>
-                    <div class="comparison-value" id="avgWeightComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Calories In</div>
-                    <div class="comparison-value" id="avgCalsInComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Calories Out</div>
-                    <div class="comparison-value" id="avgCalsOutComp">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Calorie Deficit</div>
-                    <div class="comparison-value" id="avgCaloriesComp">—</div>
-                </div>
-            </div>
 
             <div class="dashboard-grid">
                 <div class="card">
@@ -753,16 +730,16 @@
                 </div>
 
                 <div class="card">
-                    <h2>Daily Steps</h2>
+                    <h2>Caliper Readings</h2>
                     <div class="chart-container">
-                        <canvas id="stepsChart"></canvas>
+                        <canvas id="caliperChart"></canvas>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>Sleep Duration</h2>
+                    <h2>Waist Readings</h2>
                     <div class="chart-container">
-                        <canvas id="sleepChart"></canvas>
+                        <canvas id="waistChart"></canvas>
                     </div>
                 </div>
 
@@ -800,39 +777,21 @@
         <div id="productivity-tab" style="display: none;">
             <div class="metrics-grid">
                 <div class="metric-box">
-                    <div class="metric-label">Avg Primary Focus</div>
+                    <div class="metric-label">Average Primary Focus</div>
                     <div class="metric-value" id="avgFocus">—</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label">Total Tasks Done</div>
-                    <div class="metric-value" id="totalTasks">—</div>
+                    <div class="metric-label">Average Focus Score</div>
+                    <div class="metric-value" id="avgFocusScore">—</div>
+                    <div class="metric-change" id="focusScoreDelta"></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label">Avg Focus Score</div>
-                    <div class="metric-value" id="avgFocusScore">—</div>
+                    <div class="metric-label">Total Tasks Complete</div>
+                    <div class="metric-value" id="totalTasks">—</div>
                 </div>
                 <div class="metric-box">
                     <div class="metric-label">Avg Secondary Focus</div>
                     <div class="metric-value" id="avgSecondaryFocus">—</div>
-                </div>
-            </div>
-
-            <div class="comparison-grid">
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Focus vs Last Period</div>
-                    <div class="comparison-value" id="compFocusChange2">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Total Tasks vs Last Period</div>
-                    <div class="comparison-value" id="compTasksChange2">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Focus Score vs Last Period</div>
-                    <div class="comparison-value" id="compFocusScoreChange">—</div>
-                </div>
-                <div class="comparison-box">
-                    <div class="comparison-label">Avg Secondary Focus vs Last Period</div>
-                    <div class="comparison-value" id="compSecondaryFocusChange">—</div>
                 </div>
             </div>
 
@@ -865,6 +824,156 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <h2>Daily Data</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #ddd; background: #f9f9f9;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Primary Focus (1-10)</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Primary Focus Score</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Secondary Focus</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Tasks Done</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Focus Start</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Focus End</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productivityDailyDataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="nutrition-tab" style="display: none;">
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Average Cals In</div>
+                    <div class="metric-value" id="nutritionAvgCalsIn">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Cals Out</div>
+                    <div class="metric-value" id="nutritionAvgCalsOut">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Defecit</div>
+                    <div class="metric-value" id="nutritionAvgCalsDefecit">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Protein</div>
+                    <div class="metric-value" id="nutritionAvgProtein">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Protein per KG</div>
+                    <div class="metric-value" id="nutritionAvgProteinPerKg">—</div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
+                    <div>
+                        <h2>Calories Out per Day</h2>
+                        <div class="chart-container">
+                            <canvas id="calsOutChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Calories In per Day</h2>
+                        <div class="chart-container">
+                            <canvas id="calsInChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <h2>Daily Data</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #ddd; background: #f9f9f9;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Cals Out</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Cals In</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Cal Defecit</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Protein (g)</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Protein per KG</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nutritionDailyDataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="activity-tab" style="display: none;">
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Average Steps</div>
+                    <div class="metric-value" id="activityAvgSteps">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Movement</div>
+                    <div class="metric-value" id="activityAvgMovement">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Total Stretch</div>
+                    <div class="metric-value" id="activityTotalStretch">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Total Squats</div>
+                    <div class="metric-value" id="activityTotalSquats">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Press Ups</div>
+                    <div class="metric-value" id="activityAvgPressUps">—</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Average Hips & Back</div>
+                    <div class="metric-value" id="activityAvgHipsBack">—</div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
+                    <div>
+                        <h2>Hips & Back Score</h2>
+                        <div class="chart-container">
+                            <canvas id="hipsBackChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Steps by Day</h2>
+                        <div class="chart-container">
+                            <canvas id="stepsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <h2>Daily Data</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #ddd; background: #f9f9f9;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Date</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Steps</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Movement</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Press Ups</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Squats</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Stretch</th>
+                                <th style="padding: 12px; text-align: center; font-weight: 600;">Hips & Back</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityDailyDataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div id="entry-tab" style="display: none;">
@@ -874,30 +983,54 @@
                 <div style="margin-bottom: 30px;">
                     <h3>Today's Entry</h3>
                     <form onsubmit="submitMetricsData(event, true)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div class="form-group"><label>Weight (kg)</label><input type="number" id="todayWeight" step="0.1"></div>
-                        <div class="form-group"><label>Sleep (hours)</label><input type="number" id="todaySleep" step="0.5"></div>
-                        <div class="form-group"><label>Steps</label><input type="number" id="todaySteps"></div>
-                        <div class="form-group"><label>Movement (%)</label><input type="number" id="todayMovement" step="0.5"></div>
-                        <div class="form-group"><label>Cals In</label><input type="number" id="todayCalsIn"></div>
-                        <div class="form-group"><label>Cals Out</label><input type="number" id="todayCalsOut"></div>
-                        <div class="form-group"><label>Protein (g)</label><input type="number" id="todayProtein" step="0.1"></div>
-                        <div class="form-group"><label>Focus (1-10)</label><input type="number" id="todayFocus" min="1" max="10"></div>
-                        <div class="form-group"><label>Primary Focus Score</label><input type="number" id="todayPrimaryFocusScore" step="0.01"></div>
-                        <div class="form-group"><label>Secondary Focus</label><input type="number" id="todaySecondaryFocus" step="0.1"></div>
-                        <div class="form-group"><label>Primary Focus Start</label><input type="text" id="todayPrimaryFocusStart" placeholder="e.g., Email"></div>
-                        <div class="form-group"><label>Primary Focus End</label><input type="text" id="todayPrimaryFocusEnd" placeholder="e.g., Coding"></div>
-                        <div class="form-group"><label>Tasks Completed</label><input type="number" id="todayBlocks"></div>
-                        <div class="form-group"><label>Investors Approached</label><input type="number" id="todayInvestors"></div>
-                        <div class="form-group"><label>Press-Ups</label><input type="number" id="todayPressUps"></div>
-                        <div class="form-group"><label>Squats</label><select id="todaySquat"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
-                        <div class="form-group"><label>Stretch</label><select id="todayStretch"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
-                        <div class="form-group"><label>Hips & Back</label><input type="number" id="todayHipsBack" step="0.1"></div>
-                        <div class="form-group"><label>Belly</label><input type="number" id="todayBelly" step="0.1"></div>
-                        <div class="form-group"><label>Side</label><input type="number" id="todaySide" step="0.1"></div>
-                        <div class="form-group"><label>Love Handle</label><input type="number" id="todayLoveHandle" step="0.1"></div>
-                        <div class="form-group"><label>Fat</label><input type="number" id="todayFat" step="0.1"></div>
-                        <div class="form-group"><label>Thin</label><input type="number" id="todayThin" step="0.1"></div>
-                        <div class="form-group"><label>Average</label><input type="number" id="todayAverage" step="0.1"></div>
+                        <div class="form-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="todayWeight" step="0.1" placeholder="e.g., 82.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Score</label>
+                            <input type="number" id="todayPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Sleep (hours)</label>
+                            <input type="number" id="todaySleep" step="0.5" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Steps</label>
+                            <input type="number" id="todaySteps" placeholder="e.g., 10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals In</label>
+                            <input type="number" id="todayCalsIn" placeholder="e.g., 2000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals Out</label>
+                            <input type="number" id="todayCalsOut" placeholder="e.g., 2700">
+                        </div>
+                        <div class="form-group">
+                            <label>Tasks Completed</label>
+                            <input type="number" id="todayBlocks" placeholder="e.g., 3">
+                        </div>
+                        <div class="form-group">
+                            <label>Investors Approached</label>
+                            <input type="number" id="todayInvestors" placeholder="e.g., 2">
+                        </div>
+                        <div class="form-group">
+                            <label>Focus (1-10)</label>
+                            <input type="number" id="todayFocus" min="1" max="10" placeholder="e.g., 8">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary Focus</label>
+                            <input type="number" id="todaySecondaryFocus" step="0.1" placeholder="e.g., 6.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Start</label>
+                            <input type="text" id="todayPrimaryFocusStart" placeholder="e.g., Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus End</label>
+                            <input type="text" id="todayPrimaryFocusEnd" placeholder="e.g., Coding">
+                        </div>
                         <div class="form-actions" style="grid-column: 1 / -1;">
                             <button type="submit" class="btn-submit">Save Today's Data</button>
                             <button type="button" class="btn-clear" onclick="clearTodayForm()">Clear</button>
@@ -909,31 +1042,58 @@
                 <div>
                     <h3>Historical Entry</h3>
                     <form onsubmit="submitMetricsData(event, false)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div class="form-group"><label>Date</label><input type="date" id="historyDate" required></div>
-                        <div class="form-group"><label>Weight (kg)</label><input type="number" id="historyWeight" step="0.1"></div>
-                        <div class="form-group"><label>Sleep (hours)</label><input type="number" id="historySleep" step="0.5"></div>
-                        <div class="form-group"><label>Steps</label><input type="number" id="historySteps"></div>
-                        <div class="form-group"><label>Movement (%)</label><input type="number" id="historyMovement" step="0.5"></div>
-                        <div class="form-group"><label>Cals In</label><input type="number" id="historyCalsIn"></div>
-                        <div class="form-group"><label>Cals Out</label><input type="number" id="historyCalsOut"></div>
-                        <div class="form-group"><label>Protein (g)</label><input type="number" id="historyProtein" step="0.1"></div>
-                        <div class="form-group"><label>Focus (1-10)</label><input type="number" id="historyFocus" min="1" max="10"></div>
-                        <div class="form-group"><label>Primary Focus Score</label><input type="number" id="historyPrimaryFocusScore" step="0.01"></div>
-                        <div class="form-group"><label>Secondary Focus</label><input type="number" id="historySecondaryFocus" step="0.1"></div>
-                        <div class="form-group"><label>Primary Focus Start</label><input type="text" id="historyPrimaryFocusStart" placeholder="e.g., Email"></div>
-                        <div class="form-group"><label>Primary Focus End</label><input type="text" id="historyPrimaryFocusEnd" placeholder="e.g., Coding"></div>
-                        <div class="form-group"><label>Tasks Completed</label><input type="number" id="historyBlocks"></div>
-                        <div class="form-group"><label>Investors Approached</label><input type="number" id="historyInvestors"></div>
-                        <div class="form-group"><label>Press-Ups</label><input type="number" id="historyPressUps"></div>
-                        <div class="form-group"><label>Squats</label><select id="historySquat"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
-                        <div class="form-group"><label>Stretch</label><select id="historyStretch"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
-                        <div class="form-group"><label>Hips & Back</label><input type="number" id="historyHipsBack" step="0.1"></div>
-                        <div class="form-group"><label>Belly</label><input type="number" id="historyBelly" step="0.1"></div>
-                        <div class="form-group"><label>Side</label><input type="number" id="historySide" step="0.1"></div>
-                        <div class="form-group"><label>Love Handle</label><input type="number" id="historyLoveHandle" step="0.1"></div>
-                        <div class="form-group"><label>Fat</label><input type="number" id="historyFat" step="0.1"></div>
-                        <div class="form-group"><label>Thin</label><input type="number" id="historyThin" step="0.1"></div>
-                        <div class="form-group"><label>Average</label><input type="number" id="historyAverage" step="0.1"></div>
+                        <div class="form-group">
+                            <label>Date (D/M/YY)</label>
+                            <input type="text" id="historyDate" placeholder="e.g., 28/5/26" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="historyWeight" step="0.1" placeholder="e.g., 82.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Score</label>
+                            <input type="number" id="historyPrimaryFocusScore" step="0.1" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Sleep (hours)</label>
+                            <input type="number" id="historySleep" step="0.5" placeholder="e.g., 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Steps</label>
+                            <input type="number" id="historySteps" placeholder="e.g., 10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals In</label>
+                            <input type="number" id="historyCalsIn" placeholder="e.g., 2000">
+                        </div>
+                        <div class="form-group">
+                            <label>Cals Out</label>
+                            <input type="number" id="historyCalsOut" placeholder="e.g., 2700">
+                        </div>
+                        <div class="form-group">
+                            <label>Tasks Completed</label>
+                            <input type="number" id="historyBlocks" placeholder="e.g., 3">
+                        </div>
+                        <div class="form-group">
+                            <label>Investors Approached</label>
+                            <input type="number" id="historyInvestors" placeholder="e.g., 2">
+                        </div>
+                        <div class="form-group">
+                            <label>Focus (1-10)</label>
+                            <input type="number" id="historyFocus" min="1" max="10" placeholder="e.g., 8">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary Focus</label>
+                            <input type="number" id="historySecondaryFocus" step="0.1" placeholder="e.g., 6.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus Start</label>
+                            <input type="text" id="historyPrimaryFocusStart" placeholder="e.g., Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Focus End</label>
+                            <input type="text" id="historyPrimaryFocusEnd" placeholder="e.g., Coding">
+                        </div>
                         <div class="form-actions" style="grid-column: 1 / -1;">
                             <button type="submit" class="btn-submit">Save Entry</button>
                             <button type="button" class="btn-clear" onclick="clearHistoryForm()">Clear</button>
@@ -985,8 +1145,8 @@
         });
 
         // ===== DASHBOARD =====
-        const APPS_SCRIPT_URL = 'http://localhost:8080/api/get';
-        const APPS_SCRIPT_POST_URL = 'http://localhost:8080/api/post';
+        const APPS_SCRIPT_URL = 'https://personal-site-production-0e24.up.railway.app/api/get';
+        const APPS_SCRIPT_POST_URL = 'https://personal-site-production-0e24.up.railway.app/api/post';
 
         // Fallback sample data if API fails
         const sampleData = [
@@ -1032,12 +1192,19 @@
                     calories: row.calories || 0,
                     calsIn: row.calsIn || 0,
                     calsOut: row.calsOut || 0,
+                    protein: row.protein || 0,
+                    proteinPerKg: row.proteinPerKg || 0,
                     primaryFocusScore: row.primaryFocusScore || 0,
                     secondaryFocus: row.secondaryFocus || 0,
                     primaryFocusStart: row.primaryFocusStart || '',
                     primaryFocusEnd: row.primaryFocusEnd || '',
+                    movement: row.movement || 0,
+                    pressUps: row.pressUps || 0,
+                    squat: row.squat || '',
+                    stretch: row.stretch || '',
+                    hipsBack: row.hipsBack || 0,
                 }))
-                .filter(row => row.focus > 0 || row.weight > 0 || row.steps > 0 || row.sleep > 0 || row.primaryFocusScore > 0 || row.blocks > 0);
+                .filter(row => row.focus > 0 || row.weight > 0 || row.steps > 0 || row.sleep > 0 || row.primaryFocusScore > 0 || row.blocks > 0 || row.belly > 0 || row.side > 0 || row.loveHandle > 0 || row.fat > 0 || row.thin > 0 || row.average > 0 || row.calsIn > 0 || row.calsOut > 0 || row.calories > 0 || row.protein > 0 || row.proteinPerKg > 0 || row.movement > 0 || row.pressUps > 0 || row.squat || row.stretch || row.hipsBack > 0);
         }
 
         // Fetch data from Google Apps Script
@@ -1079,6 +1246,9 @@
                 createCharts();
                 updateComparisonChart();
                 updateDailyData();
+                updateProductivityDailyData();
+                updateNutritionDailyData();
+                updateActivityDailyData();
             }
         }
 
@@ -1100,11 +1270,31 @@
             const avgWeight = weights.length > 0 ? (weights.reduce((a,b) => a+b) / weights.length).toFixed(1) : '—';
             const avgFocus = focusScores.length > 0 ? (focusScores.reduce((a,b) => a+b) / focusScores.length).toFixed(1) : '—';
             const avgCalories = caloriesList.length > 0 ? Math.round(caloriesList.reduce((a,b) => a+b) / caloriesList.length).toLocaleString() : '—';
-            const avgCalsIn = calsInList.length > 0 ? Math.round(calsInList.reduce((a,b) => a+b) / calsInList.length).toLocaleString() : '—';
-            const avgCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length).toLocaleString() : '—';
+            const caliperRow = dataToUse.slice().reverse().find(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0));
+            const currentCaliper = caliperRow ? ((caliperRow.belly || 0) + (caliperRow.side || 0) + (caliperRow.loveHandle || 0)).toFixed(1) : '—';
+            const avgCalsIn = currentCaliper;
+            const waistRow = dataToUse.slice().reverse().find(d => (d.fat > 0 || d.thin > 0));
+            const waist = waistRow ? (((waistRow.fat || 0) + (waistRow.thin || 0)) / 2).toFixed(1) : '—';
+            const avgCalsOut = waist;
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
-            const avgFocusScore = primaryFocusScoreList.length > 0 ? (primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length).toFixed(1) : '—';
+
+            // Nutrition metrics
+            const proteinList = dataToUse.filter(d => d.protein > 0).map(d => d.protein);
+            const proteinPerKgList = dataToUse.filter(d => d.proteinPerKg > 0).map(d => d.proteinPerKg);
+            const avgNutritionCalsIn = calsInList.length > 0 ? Math.round(calsInList.reduce((a,b) => a+b) / calsInList.length) : '—';
+            const avgNutritionCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length) : '—';
+            const avgNutritionDefecit = caloriesList.length > 0 ? Math.round(caloriesList.reduce((a,b) => a+b) / caloriesList.length) : '—';
+            const avgNutritionProtein = proteinList.length > 0 ? (proteinList.reduce((a,b) => a+b) / proteinList.length).toFixed(1) : '—';
+            const avgNutritionProteinPerKg = proteinPerKgList.length > 0 ? (proteinPerKgList.reduce((a,b) => a+b) / proteinPerKgList.length).toFixed(2) : '—';
+
+            // Calculate average focus score from primary focus score values (out of 100%)
+            const avgFocusScore = primaryFocusScoreList.length > 0 ? ((primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length) * 100).toFixed(1) : '—';
             const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
+
+            // Calculate focus score delta (up is good for productivity)
+            const startAvgFocusScore = primaryFocusScoreList.length > 0 ? primaryFocusScoreList[0] : null;
+            const endAvgFocusScore = primaryFocusScoreList.length > 0 ? primaryFocusScoreList[primaryFocusScoreList.length - 1] : null;
+            const focusScoreDelta = startAvgFocusScore && endAvgFocusScore ? (endAvgFocusScore - startAvgFocusScore).toFixed(1) : null;
 
             // Health tab metrics
             document.getElementById('startWeight').textContent = startWeight + ' kg';
@@ -1119,8 +1309,42 @@
             // Productivity tab metrics
             document.getElementById('avgFocus').textContent = avgFocus;
             document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('avgFocusScore').textContent = avgFocusScore;
+            document.getElementById('avgFocusScore').textContent = avgFocusScore !== '—' ? avgFocusScore + '%' : '—';
+            // Display focus score delta (up is good for productivity - green for positive)
+            if (focusScoreDelta !== null) {
+                document.getElementById('focusScoreDelta').textContent = focusScoreDelta !== 0 ? (focusScoreDelta > 0 ? `+${focusScoreDelta}` : `${focusScoreDelta}`) : '';
+                document.getElementById('focusScoreDelta').className = 'metric-change ' + (focusScoreDelta > 0 ? 'positive' : (focusScoreDelta < 0 ? 'negative' : ''));
+            }
             document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
+
+            // Nutrition tab metrics
+            document.getElementById('nutritionAvgCalsIn').textContent = typeof avgNutritionCalsIn === 'number' ? avgNutritionCalsIn.toLocaleString() : avgNutritionCalsIn;
+            document.getElementById('nutritionAvgCalsOut').textContent = typeof avgNutritionCalsOut === 'number' ? avgNutritionCalsOut.toLocaleString() : avgNutritionCalsOut;
+            document.getElementById('nutritionAvgCalsDefecit').textContent = typeof avgNutritionDefecit === 'number' ? avgNutritionDefecit.toLocaleString() : avgNutritionDefecit;
+            document.getElementById('nutritionAvgProtein').textContent = avgNutritionProtein;
+            document.getElementById('nutritionAvgProteinPerKg').textContent = avgNutritionProteinPerKg;
+
+            // Activity tab metrics
+            const stepsList = dataToUse.filter(d => d.steps > 0).map(d => d.steps);
+            const movementList = dataToUse.filter(d => d.movement > 0).map(d => d.movement);
+            const stretchList = dataToUse.filter(d => d.stretch === 'yes').length;
+            const squatList = dataToUse.filter(d => d.squat === 'yes').length;
+            const pressUpsList = dataToUse.filter(d => d.pressUps > 0).map(d => d.pressUps);
+            const hipsBackList = dataToUse.filter(d => d.hipsBack > 0).map(d => d.hipsBack);
+
+            const avgActivitySteps = stepsList.length > 0 ? Math.round(stepsList.reduce((a,b) => a+b) / stepsList.length).toLocaleString() : '—';
+            const avgActivityMovement = movementList.length > 0 ? (movementList.reduce((a,b) => a+b) / movementList.length).toFixed(1) : '—';
+            const totalActivityStretch = stretchList;
+            const totalActivitySquats = squatList;
+            const avgActivityPressUps = pressUpsList.length > 0 ? (pressUpsList.reduce((a,b) => a+b) / pressUpsList.length).toFixed(1) : '—';
+            const avgActivityHipsBack = hipsBackList.length > 0 ? (hipsBackList.reduce((a,b) => a+b) / hipsBackList.length).toFixed(1) : '—';
+
+            document.getElementById('activityAvgSteps').textContent = avgActivitySteps;
+            document.getElementById('activityAvgMovement').textContent = avgActivityMovement;
+            document.getElementById('activityTotalStretch').textContent = totalActivityStretch;
+            document.getElementById('activityTotalSquats').textContent = totalActivitySquats;
+            document.getElementById('activityAvgPressUps').textContent = avgActivityPressUps;
+            document.getElementById('activityAvgHipsBack').textContent = avgActivityHipsBack;
 
             // Display second row health metrics from previous period
             const startInput = document.getElementById('startDate').value;
@@ -1131,29 +1355,9 @@
                 const lastPeriodData = getLastPeriodData(startDate, endDate);
 
                 if (lastPeriodData.length > 0) {
-                    const lastWeights = lastPeriodData.filter(d => d.weight > 0).map(d => d.weight);
-                    const lastCalsIn = lastPeriodData.filter(d => d.calsIn > 0).map(d => d.calsIn);
-                    const lastCalsOut = lastPeriodData.filter(d => d.calsOut > 0).map(d => d.calsOut);
-                    const lastCalories = lastPeriodData.filter(d => d.calories !== null && d.calories !== undefined).map(d => d.calories);
-
-                    const lastStartWeight = lastWeights.length > 0 ? lastWeights[0].toFixed(1) : '—';
-                    const lastAvgWeight = lastWeights.length > 0 ? (lastWeights.reduce((a,b) => a+b) / lastWeights.length).toFixed(1) : '—';
-                    const lastAvgCalsIn = lastCalsIn.length > 0 ? Math.round(lastCalsIn.reduce((a,b) => a+b) / lastCalsIn.length).toLocaleString() : '—';
-                    const lastAvgCalsOut = lastCalsOut.length > 0 ? Math.round(lastCalsOut.reduce((a,b) => a+b) / lastCalsOut.length).toLocaleString() : '—';
-                    const lastAvgCalories = lastCalories.length > 0 ? Math.round(lastCalories.reduce((a,b) => a+b) / lastCalories.length).toLocaleString() : '—';
-
-                    document.getElementById('startWeightComp').textContent = lastStartWeight + ' kg';
-                    document.getElementById('avgWeightComp').textContent = lastAvgWeight + ' kg';
-                    document.getElementById('avgCalsInComp').textContent = lastAvgCalsIn;
-                    document.getElementById('avgCalsOutComp').textContent = lastAvgCalsOut;
-                    document.getElementById('avgCaloriesComp').textContent = lastAvgCalories;
+                    // Previous period data available
                 } else {
                     // No previous period data available
-                    document.getElementById('startWeightComp').textContent = '—';
-                    document.getElementById('avgWeightComp').textContent = '—';
-                    document.getElementById('avgCalsInComp').textContent = '—';
-                    document.getElementById('avgCalsOutComp').textContent = '—';
-                    document.getElementById('avgCaloriesComp').textContent = '—';
                 }
             }
         }
@@ -1188,10 +1392,21 @@
                         fill: true,
                         borderWidth: 2,
                         pointRadius: 4,
-                        pointBackgroundColor: colors.primary
+                        pointBackgroundColor: colors.primary,
+                        spanGaps: true
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
             });
 
             // Weight Chart
@@ -1215,33 +1430,103 @@
             });
 
             // Steps Chart
-            chartInstances.steps = new Chart(document.getElementById('stepsChart'), {
-                type: 'bar',
+            // Caliper Readings Chart
+            chartInstances.caliper = new Chart(document.getElementById('caliperChart'), {
+                type: 'line',
                 data: {
                     labels: chartData.map(d => d.date),
-                    datasets: [{
-                        label: 'Steps',
-                        data: chartData.map(d => d.steps > 0 ? d.steps : null),
-                        backgroundColor: colors.warning,
-                        borderRadius: 4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Belly',
+                            data: chartData.map(d => d.belly > 0 ? d.belly : null),
+                            borderColor: '#ef4444',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#ef4444',
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Side',
+                            data: chartData.map(d => d.side > 0 ? d.side : null),
+                            borderColor: '#f97316',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#f97316',
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Love Handle',
+                            data: chartData.map(d => d.loveHandle > 0 ? d.loveHandle : null),
+                            borderColor: '#eab308',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#eab308',
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Total',
+                            data: chartData.map(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0) ? (d.belly + d.side + d.loveHandle) : null),
+                            borderColor: '#000000',
+                            borderWidth: 3,
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#000000',
+                            spanGaps: true
+                        }
+                    ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
             });
 
-            // Sleep Chart
-            chartInstances.sleep = new Chart(document.getElementById('sleepChart'), {
-                type: 'bar',
+            // Waist Readings Chart
+            chartInstances.waist = new Chart(document.getElementById('waistChart'), {
+                type: 'line',
                 data: {
                     labels: chartData.map(d => d.date),
-                    datasets: [{
-                        label: 'Sleep (hours)',
-                        data: chartData.map(d => d.sleep > 0 ? d.sleep : null),
-                        backgroundColor: colors.success,
-                        borderRadius: 4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Fat',
+                            data: chartData.map(d => d.fat > 0 ? d.fat : null),
+                            borderColor: '#8b5cf6',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#8b5cf6',
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Thin',
+                            data: chartData.map(d => d.thin > 0 ? d.thin : null),
+                            borderColor: '#06b6d4',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#06b6d4',
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Average',
+                            data: chartData.map(d => (d.fat > 0 || d.thin > 0) ? ((d.fat + d.thin) / 2) : null),
+                            borderColor: '#000000',
+                            borderWidth: 3,
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#000000',
+                            spanGaps: true
+                        }
+                    ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 10 } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
             });
 
             // Focus vs Blocks Correlation
@@ -1308,6 +1593,83 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
+
+            // Calories Out Chart
+            chartInstances.calsOut = new Chart(document.getElementById('calsOutChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Calories Out',
+                        data: chartData.map(d => d.calsOut > 0 ? d.calsOut : null),
+                        backgroundColor: '#ef4444',
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Calories In Chart
+            chartInstances.calsIn = new Chart(document.getElementById('calsInChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Calories In',
+                        data: chartData.map(d => d.calsIn > 0 ? d.calsIn : null),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#3b82f6',
+                        spanGaps: true
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            chartInstances.hipsBack = new Chart(document.getElementById('hipsBackChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Hips & Back',
+                        data: chartData.map(d => d.hipsBack > 0 ? d.hipsBack : null),
+                        borderColor: '#ea580c',
+                        backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#ea580c',
+                        spanGaps: true
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            chartInstances.steps = new Chart(document.getElementById('stepsChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [{
+                        label: 'Steps',
+                        data: chartData.map(d => d.steps > 0 ? d.steps : null),
+                        backgroundColor: '#16a34a',
+                        borderColor: '#15803d',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() } } }
+                }
+            });
         }
 
         function updateDailyData() {
@@ -1370,6 +1732,140 @@
                     <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(fat, 'fat')};">${fat > 0 ? fat.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(thin, 'thin')};">${thin > 0 ? thin.toFixed(1) : '—'}</td>
                     <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(average, 'average')};">${average > 0 ? average.toFixed(1) : '—'}</td>
+                </tr>`;
+            });
+            tableBody.innerHTML = html;
+        }
+
+        function updateProductivityDailyData() {
+            const tableBody = document.getElementById('productivityDailyDataTable');
+            if (!tableBody) {
+                console.log('Productivity daily data table not found');
+                return;
+            }
+
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            console.log('updateProductivityDailyData - dataToUse length:', dataToUse.length);
+
+            if (dataToUse.length === 0) {
+                tableBody.innerHTML = '';
+                console.log('No data to display');
+                return;
+            }
+
+            let html = '';
+            dataToUse.forEach(row => {
+                if (!row.date) return;
+
+                const focus = row.focus || 0;
+                const primaryFocusScore = row.primaryFocusScore || 0;
+                const secondaryFocus = row.secondaryFocus || 0;
+                const tasks = row.blocks || 0;
+
+                // Format focus start and end times
+                let focusStart = '—';
+                let focusEnd = '—';
+                if (row.primaryFocusStart) {
+                    if (typeof row.primaryFocusStart === 'string') {
+                        focusStart = row.primaryFocusStart;
+                    } else if (row.primaryFocusStart.getHours) {
+                        focusStart = String(row.primaryFocusStart.getHours()).padStart(2, '0') + ':' + String(row.primaryFocusStart.getMinutes()).padStart(2, '0');
+                    }
+                }
+                if (row.primaryFocusEnd) {
+                    if (typeof row.primaryFocusEnd === 'string') {
+                        focusEnd = row.primaryFocusEnd;
+                    } else if (row.primaryFocusEnd.getHours) {
+                        focusEnd = String(row.primaryFocusEnd.getHours()).padStart(2, '0') + ':' + String(row.primaryFocusEnd.getMinutes()).padStart(2, '0');
+                    }
+                }
+
+                html += `<tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${focus > 0 ? focus.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${primaryFocusScore > 0 ? primaryFocusScore.toFixed(2) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${secondaryFocus > 0 ? secondaryFocus.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${tasks > 0 ? tasks.toFixed(0) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${focusStart}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${focusEnd}</td>
+                </tr>`;
+            });
+            tableBody.innerHTML = html;
+        }
+
+        function updateNutritionDailyData() {
+            const tableBody = document.getElementById('nutritionDailyDataTable');
+            if (!tableBody) {
+                console.log('Nutrition daily data table not found');
+                return;
+            }
+
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            console.log('updateNutritionDailyData - dataToUse length:', dataToUse.length);
+
+            if (dataToUse.length === 0) {
+                tableBody.innerHTML = '';
+                console.log('No data to display');
+                return;
+            }
+
+            let html = '';
+            dataToUse.forEach(row => {
+                if (!row.date) return;
+
+                const calsOut = row.calsOut || 0;
+                const calsIn = row.calsIn || 0;
+                const deficit = row.calories || 0;
+                const protein = row.protein || 0;
+                const proteinPerKg = row.proteinPerKg || 0;
+
+                html += `<tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${calsOut > 0 ? calsOut.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${calsIn > 0 ? calsIn.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${deficit !== 0 ? deficit.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${protein > 0 ? protein.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${proteinPerKg > 0 ? proteinPerKg.toFixed(2) : '—'}</td>
+                </tr>`;
+            });
+            tableBody.innerHTML = html;
+        }
+
+        function updateActivityDailyData() {
+            const tableBody = document.getElementById('activityDailyDataTable');
+            if (!tableBody) {
+                console.log('Activity daily data table not found');
+                return;
+            }
+
+            const dataToUse = filteredData.length > 0 ? filteredData : data;
+            console.log('updateActivityDailyData - dataToUse length:', dataToUse.length);
+
+            if (dataToUse.length === 0) {
+                tableBody.innerHTML = '';
+                console.log('No data to display');
+                return;
+            }
+
+            let html = '';
+            dataToUse.forEach(row => {
+                if (!row.date) return;
+
+                const steps = row.steps || 0;
+                const movement = row.movement || 0;
+                const pressUps = row.pressUps || 0;
+                const squat = row.squat || '';
+                const stretch = row.stretch || '';
+                const hipsBack = row.hipsBack || 0;
+
+                html += `<tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${steps > 0 ? steps.toLocaleString() : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${movement > 0 ? movement.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${pressUps > 0 ? pressUps.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${squat ? squat.charAt(0).toUpperCase() + squat.slice(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${stretch ? stretch.charAt(0).toUpperCase() + stretch.slice(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${hipsBack > 0 ? hipsBack.toFixed(1) : '—'}</td>
                 </tr>`;
             });
             tableBody.innerHTML = html;
@@ -1557,6 +2053,9 @@
             updateComparisonChart();
             createCharts();
             updateDailyData();
+            updateProductivityDailyData();
+            updateNutritionDailyData();
+            updateActivityDailyData();
         }
 
         function updateComparisonChart() {
@@ -1642,12 +2141,16 @@
         function switchTab(tabName) {
             const healthTab = document.getElementById('health-tab');
             const productivityTab = document.getElementById('productivity-tab');
+            const nutritionTab = document.getElementById('nutrition-tab');
+            const activityTab = document.getElementById('activity-tab');
             const entryTab = document.getElementById('entry-tab');
             const buttons = document.querySelectorAll('.tab-btn');
 
             // Hide all tabs
             healthTab.style.display = 'none';
             productivityTab.style.display = 'none';
+            nutritionTab.style.display = 'none';
+            activityTab.style.display = 'none';
             entryTab.style.display = 'none';
 
             // Remove active from all buttons
@@ -1660,9 +2163,15 @@
             } else if (tabName === 'productivity') {
                 productivityTab.style.display = 'block';
                 buttons[1].classList.add('active');
+            } else if (tabName === 'nutrition') {
+                nutritionTab.style.display = 'block';
+                buttons[2].classList.add('active');
+            } else if (tabName === 'activity') {
+                activityTab.style.display = 'block';
+                buttons[3].classList.add('active');
             } else if (tabName === 'entry') {
                 entryTab.style.display = 'block';
-                buttons[2].classList.add('active');
+                buttons[4].classList.add('active');
             }
         }
 
@@ -1675,70 +2184,38 @@
             return `${d}/${m}/${y}`;
         }
 
-        function formatDateFromPicker(dateStr) {
-            if (!dateStr) return '';
-            const [year, month, day] = dateStr.split('-');
-            const yy = year.slice(2);
-            return `${day}/${month}/${yy}`;
-        }
-
         function collectFormData(isToday) {
             if (isToday) {
                 return {
                     date: getTodayDate(),
                     weight: document.getElementById('todayWeight').value || undefined,
+                    primaryFocusScore: document.getElementById('todayPrimaryFocusScore').value || undefined,
                     sleep: document.getElementById('todaySleep').value || undefined,
                     steps: document.getElementById('todaySteps').value || undefined,
-                    movement: document.getElementById('todayMovement').value || undefined,
                     calsIn: document.getElementById('todayCalsIn').value || undefined,
                     calsOut: document.getElementById('todayCalsOut').value || undefined,
-                    protein: document.getElementById('todayProtein').value || undefined,
+                    blocks: document.getElementById('todayBlocks').value || undefined,
+                    investors: document.getElementById('todayInvestors').value || undefined,
                     focus: document.getElementById('todayFocus').value || undefined,
-                    primaryFocusScore: document.getElementById('todayPrimaryFocusScore').value || undefined,
                     secondaryFocus: document.getElementById('todaySecondaryFocus').value || undefined,
                     primaryFocusStart: document.getElementById('todayPrimaryFocusStart').value || undefined,
                     primaryFocusEnd: document.getElementById('todayPrimaryFocusEnd').value || undefined,
-                    blocks: document.getElementById('todayBlocks').value || undefined,
-                    investors: document.getElementById('todayInvestors').value || undefined,
-                    pressUps: document.getElementById('todayPressUps').value || undefined,
-                    squat: document.getElementById('todaySquat').value || undefined,
-                    stretch: document.getElementById('todayStretch').value || undefined,
-                    hipsBack: document.getElementById('todayHipsBack').value || undefined,
-                    belly: document.getElementById('todayBelly').value || undefined,
-                    side: document.getElementById('todaySide').value || undefined,
-                    loveHandle: document.getElementById('todayLoveHandle').value || undefined,
-                    fat: document.getElementById('todayFat').value || undefined,
-                    thin: document.getElementById('todayThin').value || undefined,
-                    average: document.getElementById('todayAverage').value || undefined,
                 };
             } else {
-                const datePickerVal = document.getElementById('historyDate').value;
                 return {
-                    date: formatDateFromPicker(datePickerVal),
+                    date: document.getElementById('historyDate').value,
                     weight: document.getElementById('historyWeight').value || undefined,
+                    primaryFocusScore: document.getElementById('historyPrimaryFocusScore').value || undefined,
                     sleep: document.getElementById('historySleep').value || undefined,
                     steps: document.getElementById('historySteps').value || undefined,
-                    movement: document.getElementById('historyMovement').value || undefined,
                     calsIn: document.getElementById('historyCalsIn').value || undefined,
                     calsOut: document.getElementById('historyCalsOut').value || undefined,
-                    protein: document.getElementById('historyProtein').value || undefined,
+                    blocks: document.getElementById('historyBlocks').value || undefined,
+                    investors: document.getElementById('historyInvestors').value || undefined,
                     focus: document.getElementById('historyFocus').value || undefined,
-                    primaryFocusScore: document.getElementById('historyPrimaryFocusScore').value || undefined,
                     secondaryFocus: document.getElementById('historySecondaryFocus').value || undefined,
                     primaryFocusStart: document.getElementById('historyPrimaryFocusStart').value || undefined,
                     primaryFocusEnd: document.getElementById('historyPrimaryFocusEnd').value || undefined,
-                    blocks: document.getElementById('historyBlocks').value || undefined,
-                    investors: document.getElementById('historyInvestors').value || undefined,
-                    pressUps: document.getElementById('historyPressUps').value || undefined,
-                    squat: document.getElementById('historySquat').value || undefined,
-                    stretch: document.getElementById('historyStretch').value || undefined,
-                    hipsBack: document.getElementById('historyHipsBack').value || undefined,
-                    belly: document.getElementById('historyBelly').value || undefined,
-                    side: document.getElementById('historySide').value || undefined,
-                    loveHandle: document.getElementById('historyLoveHandle').value || undefined,
-                    fat: document.getElementById('historyFat').value || undefined,
-                    thin: document.getElementById('historyThin').value || undefined,
-                    average: document.getElementById('historyAverage').value || undefined,
                 };
             }
         }
@@ -1751,10 +2228,9 @@
 
             // Clean up undefined values and convert strings to numbers where appropriate
             const cleanData = {};
-            const numericFields = ['weight', 'primaryFocusScore', 'sleep', 'steps', 'movement', 'calsIn', 'calsOut', 'blocks', 'investors', 'focus', 'secondaryFocus', 'protein', 'pressUps', 'hipsBack', 'belly', 'side', 'loveHandle', 'fat', 'thin', 'average'];
             for (const [key, value] of Object.entries(formData)) {
                 if (value !== undefined && value !== '') {
-                    if (numericFields.includes(key)) {
+                    if (['weight', 'primaryFocusScore', 'sleep', 'steps', 'calsIn', 'calsOut', 'blocks', 'investors', 'focus', 'secondaryFocus'].includes(key)) {
                         cleanData[key] = parseFloat(value);
                     } else {
                         cleanData[key] = value;
@@ -1820,19 +2296,36 @@
         }
 
         function clearTodayForm() {
-            ['Weight', 'Sleep', 'Steps', 'Movement', 'CalsIn', 'CalsOut', 'Protein', 'Focus', 'PrimaryFocusScore', 'SecondaryFocus', 'PrimaryFocusStart', 'PrimaryFocusEnd', 'Blocks', 'Investors', 'PressUps', 'Squat', 'Stretch', 'HipsBack', 'Belly', 'Side', 'LoveHandle', 'Fat', 'Thin', 'Average'].forEach(field => {
-                const el = document.getElementById('today' + field);
-                if (el) el.value = '';
-            });
+            document.getElementById('todayWeight').value = '';
+            document.getElementById('todayPrimaryFocusScore').value = '';
+            document.getElementById('todaySleep').value = '';
+            document.getElementById('todaySteps').value = '';
+            document.getElementById('todayCalsIn').value = '';
+            document.getElementById('todayCalsOut').value = '';
+            document.getElementById('todayBlocks').value = '';
+            document.getElementById('todayInvestors').value = '';
+            document.getElementById('todayFocus').value = '';
+            document.getElementById('todaySecondaryFocus').value = '';
+            document.getElementById('todayPrimaryFocusStart').value = '';
+            document.getElementById('todayPrimaryFocusEnd').value = '';
             document.getElementById('todayMessage').textContent = '';
             document.getElementById('todayMessage').classList.remove('error', 'success');
         }
 
         function clearHistoryForm() {
-            ['Date', 'Weight', 'Sleep', 'Steps', 'Movement', 'CalsIn', 'CalsOut', 'Protein', 'Focus', 'PrimaryFocusScore', 'SecondaryFocus', 'PrimaryFocusStart', 'PrimaryFocusEnd', 'Blocks', 'Investors', 'PressUps', 'Squat', 'Stretch', 'HipsBack', 'Belly', 'Side', 'LoveHandle', 'Fat', 'Thin', 'Average'].forEach(field => {
-                const el = document.getElementById('history' + field);
-                if (el) el.value = '';
-            });
+            document.getElementById('historyDate').value = '';
+            document.getElementById('historyWeight').value = '';
+            document.getElementById('historyPrimaryFocusScore').value = '';
+            document.getElementById('historySleep').value = '';
+            document.getElementById('historySteps').value = '';
+            document.getElementById('historyCalsIn').value = '';
+            document.getElementById('historyCalsOut').value = '';
+            document.getElementById('historyBlocks').value = '';
+            document.getElementById('historyInvestors').value = '';
+            document.getElementById('historyFocus').value = '';
+            document.getElementById('historySecondaryFocus').value = '';
+            document.getElementById('historyPrimaryFocusStart').value = '';
+            document.getElementById('historyPrimaryFocusEnd').value = '';
             document.getElementById('historyMessage').textContent = '';
             document.getElementById('historyMessage').classList.remove('error', 'success');
         }
@@ -1840,9 +2333,9 @@
         // Initialize - load data from Google Sheet
         loadData();
 
-        // Set default date range to "All Time" on load
+        // Set default date range to "This Month" on load
         setTimeout(() => {
-            setDateRange('allTime');
+            setDateRange('thisMonth');
         }, 500);
     </script>
 </body>
