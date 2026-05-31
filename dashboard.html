@@ -1225,6 +1225,22 @@
             }
         }
 
+        function applyMetricHighlight(elementId, metricName, value) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            const numValue = typeof value === 'string' ? parseFloat(value) : value;
+            const bgColor = getCellColor(metricName, numValue);
+            if (bgColor) {
+                element.style.backgroundColor = bgColor;
+                element.style.color = 'white';
+                element.style.borderRadius = '8px';
+                element.style.padding = '10px 12px';
+            } else {
+                element.style.backgroundColor = '';
+                element.style.color = '';
+            }
+        }
+
         function calculateMetrics() {
             const dataToUse = filteredData.length > 0 ? filteredData : data;
 
@@ -1271,30 +1287,44 @@
 
             // Health tab metrics
             document.getElementById('startWeight').textContent = startWeight + ' kg';
+            applyMetricHighlight('startWeight', 'weight', startWeight);
             document.getElementById('currentWeight').textContent = currentWeight + ' kg';
+            applyMetricHighlight('currentWeight', 'weight', currentWeight);
             document.getElementById('weightDelta').textContent = weightDelta !== 0 ? (weightDelta < 0 ? `${weightDelta} kg` : `+${weightDelta} kg`) : '';
             document.getElementById('weightDelta').className = 'metric-change ' + (weightDelta < 0 ? 'positive' : (weightDelta > 0 ? 'negative' : ''));
             document.getElementById('avgWeight').textContent = avgWeight + ' kg';
+            applyMetricHighlight('avgWeight', 'weight', avgWeight);
             document.getElementById('avgCalories').textContent = avgCalories;
+            applyMetricHighlight('avgCalories', 'calories', avgCalories);
             document.getElementById('avgCalsIn').textContent = avgCalsIn;
+            applyMetricHighlight('avgCalsIn', 'calsIn', avgCalsIn);
             document.getElementById('avgCalsOut').textContent = avgCalsOut;
+            applyMetricHighlight('avgCalsOut', 'calsOut', avgCalsOut);
 
             // Productivity tab metrics
             document.getElementById('avgFocus').textContent = avgFocus;
+            applyMetricHighlight('avgFocus', 'focus', avgFocus);
             document.getElementById('totalTasks').textContent = totalTasks;
+            applyMetricHighlight('totalTasks', 'blocks', totalTasks);
             document.getElementById('avgFocusScore').textContent = avgFocusScore !== '—' ? avgFocusScore + '%' : '—';
+            applyMetricHighlight('avgFocusScore', 'primaryFocusScore', avgFocusScore);
             // Display focus score delta (up is good for productivity - green for positive)
             if (focusScoreDelta !== null) {
                 document.getElementById('focusScoreDelta').textContent = focusScoreDelta !== 0 ? (focusScoreDelta > 0 ? `+${focusScoreDelta}` : `${focusScoreDelta}`) : '';
                 document.getElementById('focusScoreDelta').className = 'metric-change ' + (focusScoreDelta > 0 ? 'positive' : (focusScoreDelta < 0 ? 'negative' : ''));
             }
             document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
+            applyMetricHighlight('avgSecondaryFocus', 'secondaryFocus', avgSecondaryFocus);
 
             // Nutrition tab metrics
             document.getElementById('nutritionAvgCalsIn').textContent = typeof avgNutritionCalsIn === 'number' ? avgNutritionCalsIn.toLocaleString() : avgNutritionCalsIn;
+            applyMetricHighlight('nutritionAvgCalsIn', 'calsIn', avgNutritionCalsIn);
             document.getElementById('nutritionAvgCalsOut').textContent = typeof avgNutritionCalsOut === 'number' ? avgNutritionCalsOut.toLocaleString() : avgNutritionCalsOut;
+            applyMetricHighlight('nutritionAvgCalsOut', 'calsOut', avgNutritionCalsOut);
             document.getElementById('nutritionAvgCalsDefecit').textContent = typeof avgNutritionDefecit === 'number' ? avgNutritionDefecit.toLocaleString() : avgNutritionDefecit;
+            applyMetricHighlight('nutritionAvgCalsDefecit', 'calories', avgNutritionDefecit);
             document.getElementById('nutritionAvgProtein').textContent = avgNutritionProtein;
+            applyMetricHighlight('nutritionAvgProtein', 'protein', avgNutritionProtein);
             document.getElementById('nutritionAvgProteinPerKg').textContent = avgNutritionProteinPerKg;
 
             // Activity tab metrics
@@ -1313,11 +1343,15 @@
             const avgActivityHipsBack = hipsBackList.length > 0 ? (hipsBackList.reduce((a,b) => a+b) / hipsBackList.length).toFixed(1) : '—';
 
             document.getElementById('activityAvgSteps').textContent = avgActivitySteps;
+            applyMetricHighlight('activityAvgSteps', 'steps', avgActivitySteps);
             document.getElementById('activityAvgMovement').textContent = avgActivityMovement;
+            applyMetricHighlight('activityAvgMovement', 'movement', avgActivityMovement);
             document.getElementById('activityTotalStretch').textContent = totalActivityStretch;
             document.getElementById('activityTotalSquats').textContent = totalActivitySquats;
             document.getElementById('activityAvgPressUps').textContent = avgActivityPressUps;
+            applyMetricHighlight('activityAvgPressUps', 'pressUps', avgActivityPressUps);
             document.getElementById('activityAvgHipsBack').textContent = avgActivityHipsBack;
+            applyMetricHighlight('activityAvgHipsBack', 'hipsBack', avgActivityHipsBack);
 
             // Display second row health metrics from previous period
             const startInput = document.getElementById('startDate').value;
@@ -1662,30 +1696,8 @@
                 return;
             }
 
-            const metricThresholds = {
-                weight: { minpoint: 80, midpoint: 82.5, maxpoint: 85 },
-                belly: { minpoint: 79, midpoint: 82.5, maxpoint: 84 },
-                side: { minpoint: 0, midpoint: 0, maxpoint: 0 },
-                loveHandle: { minpoint: 0, midpoint: 0, maxpoint: 0 },
-                fat: { minpoint: 0, midpoint: 0, maxpoint: 0 },
-                thin: { minpoint: 0, midpoint: 0, maxpoint: 0 },
-                average: { minpoint: 0, midpoint: 0, maxpoint: 0 }
-            };
-
-            function getMetricColor(value, metric) {
-                if (!value || value === 0 || value === null) return '#ffffff';
-                const threshold = metricThresholds[metric];
-                if (!threshold) return '#ffffff';
-
-                if (threshold.maxpoint === 0) return '#ffffff';
-
-                if (value <= threshold.minpoint) return '#90EE90';
-                if (value <= threshold.midpoint) return '#FFFF99';
-                return '#FF6B6B';
-            }
-
             let html = '';
-            dataToUse.forEach(row => {
+            dataToUse.forEach((row, idx) => {
                 if (!row.date) return;
 
                 const weight = row.weight || 0;
@@ -1696,15 +1708,32 @@
                 const thin = row.thin || 0;
                 const average = row.average || 0;
 
+                const getPrevValue = (col) => idx > 0 ? (dataToUse[idx - 1][col] || null) : null;
+                const getColor = (col, val) => getCellColor(col, val, getPrevValue(col)) || '';
+
+                const wColor = getColor('weight', weight);
+                const bellyColor = getColor('belly', belly);
+                const sideColor = getColor('side', side);
+                const lhColor = getColor('loveHandle', loveHandle);
+                const fatColor = getColor('fat', fat);
+                const thinColor = getColor('thin', thin);
+
+                const wStyle = wColor ? `padding: 10px 12px; text-align: center; background-color: ${wColor};` : 'padding: 10px 12px; text-align: center;';
+                const bellyStyle = bellyColor ? `padding: 10px 12px; text-align: center; background-color: ${bellyColor};` : 'padding: 10px 12px; text-align: center;';
+                const sideStyle = sideColor ? `padding: 10px 12px; text-align: center; background-color: ${sideColor};` : 'padding: 10px 12px; text-align: center;';
+                const lhStyle = lhColor ? `padding: 10px 12px; text-align: center; background-color: ${lhColor};` : 'padding: 10px 12px; text-align: center;';
+                const fatStyle = fatColor ? `padding: 10px 12px; text-align: center; background-color: ${fatColor};` : 'padding: 10px 12px; text-align: center;';
+                const thinStyle = thinColor ? `padding: 10px 12px; text-align: center; background-color: ${thinColor};` : 'padding: 10px 12px; text-align: center;';
+
                 html += `<tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(weight, 'weight')};">${weight > 0 ? weight.toFixed(1) : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(belly, 'belly')};">${belly > 0 ? belly.toFixed(1) : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(side, 'side')};">${side > 0 ? side.toFixed(1) : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(loveHandle, 'loveHandle')};">${loveHandle > 0 ? loveHandle.toFixed(1) : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(fat, 'fat')};">${fat > 0 ? fat.toFixed(1) : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(thin, 'thin')};">${thin > 0 ? thin.toFixed(1) : '—'}</td>
-                    <td style="padding: 10px 12px; text-align: center; background-color: ${getMetricColor(average, 'average')};">${average > 0 ? average.toFixed(1) : '—'}</td>
+                    <td style="${wStyle}">${weight > 0 ? weight.toFixed(1) : '—'}</td>
+                    <td style="${bellyStyle}">${belly > 0 ? belly.toFixed(1) : '—'}</td>
+                    <td style="${sideStyle}">${side > 0 ? side.toFixed(1) : '—'}</td>
+                    <td style="${lhStyle}">${loveHandle > 0 ? loveHandle.toFixed(1) : '—'}</td>
+                    <td style="${fatStyle}">${fat > 0 ? fat.toFixed(1) : '—'}</td>
+                    <td style="${thinStyle}">${thin > 0 ? thin.toFixed(1) : '—'}</td>
+                    <td style="padding: 10px 12px; text-align: center;">${average > 0 ? average.toFixed(1) : '—'}</td>
                 </tr>`;
             });
             tableBody.innerHTML = html;
@@ -1848,6 +1877,71 @@
         let rawDataSortAscending = true;
         let rawDataVisibleColumns = {};
 
+        const highlightRules = {
+            investors: { green: v => v >= 2, red: v => v === 0 },
+            focus: { green: v => v >= 8, red: v => v <= 6 },
+            primaryFocusStart: { green: v => v <= 9, red: v => v >= 10 },
+            primaryFocusEnd: { green: v => v >= 14, red: v => v < 13 },
+            primaryFocusScore: { green: v => (v > 1 ? v / 100 : v) >= 0.5, red: v => (v > 1 ? v / 100 : v) < 0.4 },
+            secondaryFocus: { green: v => v >= 8, red: v => v <= 6 },
+            blocks: { green: v => v >= 2, red: v => v === 0 },
+            pressUps: { green: v => v >= 20, red: v => v === 0 },
+            squat: { green: v => v === 'yes' || v === 'Yes', red: v => v === 'no' || v === 'No' },
+            hipsBack: { green: v => v >= 7, red: v => v <= 5 },
+            stretch: { green: v => v === 'yes' || v === 'Yes', red: v => v === 'no' || v === 'No' },
+            sleep: { green: v => v >= 90, red: v => v <= 70 },
+            steps: { green: v => v >= 11000, red: v => v <= 8000 },
+            movement: { green: v => v >= 95, red: v => v <= 90 },
+            calsOut: { green: v => v >= 3000, red: v => v <= 2000 },
+            calsIn: { green: v => v <= 2000, red: v => v >= 2500 },
+            calories: { green: v => v <= -1000, red: v => v > 0 },
+            protein: { green: v => v >= 160, red: v => v <= 100 },
+            wakeUp: { green: v => parseTimeToMinutes(v) <= 390, red: v => parseTimeToMinutes(v) >= 420 },
+            goBed: { green: v => parseTimeToMinutes(v) <= 1380, red: v => parseTimeToMinutes(v) >= 1440 },
+            weight: { green: false, red: false },
+            belly: { green: false, red: false },
+            side: { green: false, red: false },
+            loveHandle: { green: false, red: false },
+            fat: { green: false, red: false },
+            thin: { green: false, red: false }
+        };
+
+        function parseTimeToMinutes(timeStr) {
+            if (typeof timeStr !== 'string') return 0;
+            const parts = timeStr.split(':').map(p => parseInt(p) || 0);
+            return parts[0] * 60 + parts[1];
+        }
+
+        function getCellColor(col, value, prevValue = null) {
+            if (value === null || value === undefined || value === '' || value === '—') return '';
+            const rule = highlightRules[col];
+            if (!rule) return '';
+
+            if (col === 'belly' || col === 'side' || col === 'loveHandle' || col === 'fat' || col === 'thin') {
+                if (prevValue !== null) {
+                    const curr = parseFloat(value) || 0;
+                    const prev = parseFloat(prevValue) || 0;
+                    if (curr < prev) return '#90EE90';
+                    if (curr > prev) return '#FFB6C6';
+                }
+                return '';
+            }
+
+            let numVal = value;
+            if (typeof value === 'string') {
+                numVal = parseFloat(value);
+                if (isNaN(numVal)) numVal = value;
+            }
+
+            if (col === 'primaryFocusStart' || col === 'primaryFocusEnd') {
+                numVal = parseInt(value) || 0;
+            }
+
+            if (typeof rule.green === 'function' && rule.green(numVal)) return '#90EE90';
+            if (typeof rule.red === 'function' && rule.red(numVal)) return '#FFB6C6';
+            return '';
+        }
+
         function updateRawDataTable() {
             const dataToUse = data;
             console.log('updateRawDataTable called, data length:', dataToUse.length);
@@ -1893,13 +1987,23 @@
             }
 
             let bodyHtml = '';
-            sorted.forEach(row => {
+            sorted.forEach((row, rowIdx) => {
                 bodyHtml += '<tr style="border-bottom: 1px solid #eee;">';
                 visibleCols.forEach((col, idx) => {
                     const value = row[col];
                     const display = value === null || value === undefined || value === '' ? '—' : (typeof value === 'number' ? value.toFixed(2) : String(value));
                     const isDateCol = idx === 0;
-                    const style = isDateCol ? 'padding: 10px 12px; text-align: left; font-size: 13px; position: sticky; left: 0; background: white; z-index: 1;' : 'padding: 10px 12px; text-align: left; font-size: 13px;';
+                    let style = isDateCol ? 'padding: 10px 12px; text-align: left; font-size: 13px; position: sticky; left: 0; background: white; z-index: 1;' : 'padding: 10px 12px; text-align: left; font-size: 13px;';
+
+                    let prevValue = null;
+                    if ((col === 'belly' || col === 'side' || col === 'loveHandle' || col === 'fat' || col === 'thin') && rowIdx > 0) {
+                        prevValue = sorted[rowIdx - 1][col];
+                    }
+
+                    const bgColor = getCellColor(col, value, prevValue);
+                    if (bgColor) {
+                        style += `background-color: ${bgColor};`;
+                    }
                     bodyHtml += `<td style="${style}">${display}</td>`;
                 });
                 bodyHtml += '</tr>';
