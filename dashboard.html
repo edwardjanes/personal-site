@@ -1509,8 +1509,24 @@
                 const primaryFocusScore = row.primaryFocusScore || 0;
                 const secondaryFocus = row.secondaryFocus || 0;
                 const tasks = row.blocks || 0;
-                const focusStart = row.primaryFocusStart || '—';
-                const focusEnd = row.primaryFocusEnd || '—';
+
+                // Format focus start and end times
+                let focusStart = '—';
+                let focusEnd = '—';
+                if (row.primaryFocusStart) {
+                    if (typeof row.primaryFocusStart === 'string') {
+                        focusStart = row.primaryFocusStart;
+                    } else if (row.primaryFocusStart.getHours) {
+                        focusStart = String(row.primaryFocusStart.getHours()).padStart(2, '0') + ':' + String(row.primaryFocusStart.getMinutes()).padStart(2, '0');
+                    }
+                }
+                if (row.primaryFocusEnd) {
+                    if (typeof row.primaryFocusEnd === 'string') {
+                        focusEnd = row.primaryFocusEnd;
+                    } else if (row.primaryFocusEnd.getHours) {
+                        focusEnd = String(row.primaryFocusEnd.getHours()).padStart(2, '0') + ':' + String(row.primaryFocusEnd.getMinutes()).padStart(2, '0');
+                    }
+                }
 
                 html += `<tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 10px 12px; text-align: left;">${row.date}</td>
