@@ -1137,8 +1137,8 @@
             const avgCalsOut = waist;
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
 
-            // Calculate average focus score from primary focus score values
-            const avgFocusScore = primaryFocusScoreList.length > 0 ? (primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length).toFixed(1) : '—';
+            // Calculate average focus score from primary focus score values (out of 100%)
+            const avgFocusScore = primaryFocusScoreList.length > 0 ? ((primaryFocusScoreList.reduce((a,b) => a+b) / primaryFocusScoreList.length) * 10).toFixed(1) : '—';
             const avgSecondaryFocus = secondaryFocusList.length > 0 ? (secondaryFocusList.reduce((a,b) => a+b) / secondaryFocusList.length).toFixed(1) : '—';
 
             // Health tab metrics
@@ -1154,7 +1154,7 @@
             // Productivity tab metrics
             document.getElementById('avgFocus').textContent = avgFocus;
             document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('avgFocusScore').textContent = avgFocusScore;
+            document.getElementById('avgFocusScore').textContent = avgFocusScore !== '—' ? avgFocusScore + '%' : '—';
             document.getElementById('avgSecondaryFocus').textContent = avgSecondaryFocus;
 
             // Display second row health metrics from previous period
