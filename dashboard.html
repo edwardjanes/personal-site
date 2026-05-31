@@ -1151,7 +1151,8 @@
             const avgWeight = weights.length > 0 ? (weights.reduce((a,b) => a+b) / weights.length).toFixed(1) : '—';
             const avgFocus = focusScores.length > 0 ? (focusScores.reduce((a,b) => a+b) / focusScores.length).toFixed(1) : '—';
             const avgCalories = caloriesList.length > 0 ? Math.round(caloriesList.reduce((a,b) => a+b) / caloriesList.length).toLocaleString() : '—';
-            const currentCaliper = dataToUse.length > 0 ? ((dataToUse[dataToUse.length - 1].belly || 0) + (dataToUse[dataToUse.length - 1].side || 0) + (dataToUse[dataToUse.length - 1].loveHandle || 0)).toFixed(1) : '—';
+            const caliperRow = dataToUse.slice().reverse().find(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0));
+            const currentCaliper = caliperRow ? ((caliperRow.belly || 0) + (caliperRow.side || 0) + (caliperRow.loveHandle || 0)).toFixed(1) : '—';
             const avgCalsIn = currentCaliper;
             const avgCalsOut = calsOutList.length > 0 ? Math.round(calsOutList.reduce((a,b) => a+b) / calsOutList.length).toLocaleString() : '—';
             const totalTasks = tasksList.length > 0 ? tasksList.reduce((a,b) => a+b) : 0;
@@ -1190,7 +1191,8 @@
 
                     const lastStartWeight = lastWeights.length > 0 ? lastWeights[0].toFixed(1) : '—';
                     const lastAvgWeight = lastWeights.length > 0 ? (lastWeights.reduce((a,b) => a+b) / lastWeights.length).toFixed(1) : '—';
-                    const lastCaliper = lastPeriodData.length > 0 ? ((lastPeriodData[lastPeriodData.length - 1].belly || 0) + (lastPeriodData[lastPeriodData.length - 1].side || 0) + (lastPeriodData[lastPeriodData.length - 1].loveHandle || 0)).toFixed(1) : '—';
+                    const lastCaliperRow = lastPeriodData.slice().reverse().find(d => (d.belly > 0 || d.side > 0 || d.loveHandle > 0));
+                    const lastCaliper = lastCaliperRow ? ((lastCaliperRow.belly || 0) + (lastCaliperRow.side || 0) + (lastCaliperRow.loveHandle || 0)).toFixed(1) : '—';
                     const lastAvgCalsIn = lastCaliper;
                     const lastAvgCalsOut = lastCalsOut.length > 0 ? Math.round(lastCalsOut.reduce((a,b) => a+b) / lastCalsOut.length).toLocaleString() : '—';
                     const lastAvgCalories = lastCalories.length > 0 ? Math.round(lastCalories.reduce((a,b) => a+b) / lastCalories.length).toLocaleString() : '—';
